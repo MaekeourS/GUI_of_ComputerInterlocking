@@ -78,6 +78,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ImportingData";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "站场信息输入";
             this.ResumeLayout(false);
             this.PerformLayout();

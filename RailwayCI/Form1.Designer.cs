@@ -54,6 +54,7 @@
             this.toolStripStatusLabel8 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel9 = new System.Windows.Forms.ToolStripStatusLabel();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -67,7 +68,7 @@
             this.关于ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(964, 25);
+            this.menuStrip1.Size = new System.Drawing.Size(964, 27);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -77,28 +78,29 @@
             this.直接输入ToolStripMenuItem,
             this.从文件导入ToolStripMenuItem,
             this.重置ToolStripMenuItem});
+            this.站场ToolStripMenuItem.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.站场ToolStripMenuItem.Name = "站场ToolStripMenuItem";
-            this.站场ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.站场ToolStripMenuItem.Size = new System.Drawing.Size(47, 23);
             this.站场ToolStripMenuItem.Text = "站场";
             // 
             // 直接输入ToolStripMenuItem
             // 
             this.直接输入ToolStripMenuItem.Name = "直接输入ToolStripMenuItem";
-            this.直接输入ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.直接输入ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.直接输入ToolStripMenuItem.Text = "直接输入";
             this.直接输入ToolStripMenuItem.Click += new System.EventHandler(this.直接输入ToolStripMenuItem_Click);
             // 
             // 从文件导入ToolStripMenuItem
             // 
             this.从文件导入ToolStripMenuItem.Name = "从文件导入ToolStripMenuItem";
-            this.从文件导入ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.从文件导入ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.从文件导入ToolStripMenuItem.Text = "从文件导入";
             this.从文件导入ToolStripMenuItem.Click += new System.EventHandler(this.从文件导入ToolStripMenuItem_Click);
             // 
             // 重置ToolStripMenuItem
             // 
             this.重置ToolStripMenuItem.Name = "重置ToolStripMenuItem";
-            this.重置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.重置ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.重置ToolStripMenuItem.Text = "重置";
             // 
             // 导出ToolStripMenuItem
@@ -107,26 +109,27 @@
             this.站场数据ToolStripMenuItem,
             this.站场事件记录ToolStripMenuItem,
             this.站场图片ToolStripMenuItem});
+            this.导出ToolStripMenuItem.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.导出ToolStripMenuItem.Name = "导出ToolStripMenuItem";
-            this.导出ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.导出ToolStripMenuItem.Size = new System.Drawing.Size(47, 23);
             this.导出ToolStripMenuItem.Text = "导出";
             // 
             // 站场数据ToolStripMenuItem
             // 
             this.站场数据ToolStripMenuItem.Name = "站场数据ToolStripMenuItem";
-            this.站场数据ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.站场数据ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.站场数据ToolStripMenuItem.Text = "站场数据";
             // 
             // 站场事件记录ToolStripMenuItem
             // 
             this.站场事件记录ToolStripMenuItem.Name = "站场事件记录ToolStripMenuItem";
-            this.站场事件记录ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.站场事件记录ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.站场事件记录ToolStripMenuItem.Text = "站场事件记录";
             // 
             // 站场图片ToolStripMenuItem
             // 
             this.站场图片ToolStripMenuItem.Name = "站场图片ToolStripMenuItem";
-            this.站场图片ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.站场图片ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.站场图片ToolStripMenuItem.Text = "站场图片";
             // 
             // 设置ToolStripMenuItem
@@ -135,33 +138,35 @@
             this.修改保护口令ToolStripMenuItem,
             this.修改站场名ToolStripMenuItem,
             this.校准当前时间ToolStripMenuItem});
+            this.设置ToolStripMenuItem.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
-            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(47, 23);
             this.设置ToolStripMenuItem.Text = "设置";
             // 
             // 修改保护口令ToolStripMenuItem
             // 
             this.修改保护口令ToolStripMenuItem.Name = "修改保护口令ToolStripMenuItem";
-            this.修改保护口令ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.修改保护口令ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.修改保护口令ToolStripMenuItem.Text = "修改保护口令";
             // 
             // 修改站场名ToolStripMenuItem
             // 
             this.修改站场名ToolStripMenuItem.Name = "修改站场名ToolStripMenuItem";
-            this.修改站场名ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.修改站场名ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.修改站场名ToolStripMenuItem.Text = "修改站场名";
             this.修改站场名ToolStripMenuItem.Click += new System.EventHandler(this.修改站场名ToolStripMenuItem_Click);
             // 
             // 校准当前时间ToolStripMenuItem
             // 
             this.校准当前时间ToolStripMenuItem.Name = "校准当前时间ToolStripMenuItem";
-            this.校准当前时间ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.校准当前时间ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.校准当前时间ToolStripMenuItem.Text = "校准当前时间";
             // 
             // 关于ToolStripMenuItem
             // 
+            this.关于ToolStripMenuItem.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.关于ToolStripMenuItem.Name = "关于ToolStripMenuItem";
-            this.关于ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.关于ToolStripMenuItem.Size = new System.Drawing.Size(47, 23);
             this.关于ToolStripMenuItem.Text = "关于";
             this.关于ToolStripMenuItem.Click += new System.EventHandler(this.关于ToolStripMenuItem_Click);
             // 
@@ -177,9 +182,9 @@
             this.toolStripStatusLabel7,
             this.toolStripStatusLabel8,
             this.toolStripStatusLabel9});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 542);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 540);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(964, 26);
+            this.statusStrip1.Size = new System.Drawing.Size(964, 28);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -189,8 +194,9 @@
             this.toolStripStatusLabel1.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabel1.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(48, 21);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(52, 23);
             this.toolStripStatusLabel1.Text = "总定位";
             this.toolStripStatusLabel1.Click += new System.EventHandler(this.toolStripStatusLabel_Click);
             // 
@@ -200,9 +206,10 @@
             this.toolStripStatusLabel2.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabel2.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.toolStripStatusLabel2.ForeColor = System.Drawing.SystemColors.ControlText;
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(48, 21);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(52, 23);
             this.toolStripStatusLabel2.Text = "总反位";
             this.toolStripStatusLabel2.Click += new System.EventHandler(this.toolStripStatusLabel_Click);
             // 
@@ -212,9 +219,10 @@
             this.toolStripStatusLabel3.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabel3.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.toolStripStatusLabel3.ForeColor = System.Drawing.SystemColors.ControlText;
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(36, 21);
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(39, 23);
             this.toolStripStatusLabel3.Text = "单锁";
             this.toolStripStatusLabel3.Click += new System.EventHandler(this.toolStripStatusLabel_Click);
             // 
@@ -224,9 +232,10 @@
             this.toolStripStatusLabel4.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabel4.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.toolStripStatusLabel4.ForeColor = System.Drawing.SystemColors.ControlText;
             this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
-            this.toolStripStatusLabel4.Size = new System.Drawing.Size(36, 21);
+            this.toolStripStatusLabel4.Size = new System.Drawing.Size(39, 23);
             this.toolStripStatusLabel4.Text = "单解";
             this.toolStripStatusLabel4.Click += new System.EventHandler(this.toolStripStatusLabel_Click);
             // 
@@ -236,9 +245,10 @@
             this.toolStripStatusLabel5.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabel5.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.toolStripStatusLabel5.ForeColor = System.Drawing.SystemColors.ControlText;
             this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
-            this.toolStripStatusLabel5.Size = new System.Drawing.Size(60, 21);
+            this.toolStripStatusLabel5.Size = new System.Drawing.Size(65, 23);
             this.toolStripStatusLabel5.Text = "道岔封锁";
             this.toolStripStatusLabel5.Click += new System.EventHandler(this.toolStripStatusLabel_Click);
             // 
@@ -248,9 +258,10 @@
             this.toolStripStatusLabel6.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabel6.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.toolStripStatusLabel6.ForeColor = System.Drawing.SystemColors.ControlText;
             this.toolStripStatusLabel6.Name = "toolStripStatusLabel6";
-            this.toolStripStatusLabel6.Size = new System.Drawing.Size(60, 21);
+            this.toolStripStatusLabel6.Size = new System.Drawing.Size(65, 23);
             this.toolStripStatusLabel6.Text = "道岔解封";
             this.toolStripStatusLabel6.Click += new System.EventHandler(this.toolStripStatusLabel_Click);
             // 
@@ -260,9 +271,10 @@
             this.toolStripStatusLabel7.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabel7.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.toolStripStatusLabel7.ForeColor = System.Drawing.SystemColors.ControlText;
             this.toolStripStatusLabel7.Name = "toolStripStatusLabel7";
-            this.toolStripStatusLabel7.Size = new System.Drawing.Size(48, 21);
+            this.toolStripStatusLabel7.Size = new System.Drawing.Size(52, 23);
             this.toolStripStatusLabel7.Text = "总取消";
             this.toolStripStatusLabel7.Click += new System.EventHandler(this.toolStripStatusLabel_Click);
             // 
@@ -272,9 +284,10 @@
             this.toolStripStatusLabel8.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabel8.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.toolStripStatusLabel8.ForeColor = System.Drawing.SystemColors.ControlText;
             this.toolStripStatusLabel8.Name = "toolStripStatusLabel8";
-            this.toolStripStatusLabel8.Size = new System.Drawing.Size(48, 21);
+            this.toolStripStatusLabel8.Size = new System.Drawing.Size(52, 23);
             this.toolStripStatusLabel8.Text = "总人解";
             this.toolStripStatusLabel8.Click += new System.EventHandler(this.toolStripStatusLabel_Click);
             // 
@@ -284,9 +297,10 @@
             this.toolStripStatusLabel9.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabel9.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.toolStripStatusLabel9.ForeColor = System.Drawing.SystemColors.ControlText;
             this.toolStripStatusLabel9.Name = "toolStripStatusLabel9";
-            this.toolStripStatusLabel9.Size = new System.Drawing.Size(60, 21);
+            this.toolStripStatusLabel9.Size = new System.Drawing.Size(65, 23);
             this.toolStripStatusLabel9.Text = "模拟行车";
             this.toolStripStatusLabel9.Click += new System.EventHandler(this.toolStripStatusLabel_Click);
             // 
@@ -295,11 +309,22 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(363, 50);
+            this.label1.Location = new System.Drawing.Point(305, 50);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(120, 35);
             this.label1.TabIndex = 2;
             this.label1.Text = "站场名";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("宋体", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(515, 62);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(52, 21);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "时间";
             // 
             // Form1
             // 
@@ -307,6 +332,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.WindowText;
             this.ClientSize = new System.Drawing.Size(964, 568);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
@@ -350,6 +376,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel8;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel9;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }
 

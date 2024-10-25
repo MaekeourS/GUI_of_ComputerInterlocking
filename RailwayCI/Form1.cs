@@ -18,8 +18,16 @@ namespace RailwayCI
         public Form1()
         {
             InitializeComponent();
+            label2.Text = DateTime.Now.ToString("yyyy年MM月dd日 HH时mm分ss秒");
+            Timer timer = new Timer();
+            timer.Interval = 1000; // 设置计时器间隔为1秒  
+            timer.Tick += Timer_Tick; // 绑定Tick事件处理器  
+            timer.Start(); // 启动计时器  
         }
-
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            label2.Text = DateTime.Now.ToString("yyyy年MM月dd日 HH时mm分ss秒"); // 更新Label文本为当前时间  
+        }
         public string StationName
         {
             get { return label1.Text; }

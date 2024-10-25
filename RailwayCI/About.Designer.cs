@@ -62,7 +62,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.Location = new System.Drawing.Point(105, 76);
+            this.label2.Location = new System.Drawing.Point(98, 72);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(119, 19);
             this.label2.TabIndex = 2;
@@ -71,10 +71,10 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("宋体", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.Location = new System.Drawing.Point(35, 112);
+            this.label3.Font = new System.Drawing.Font("宋体", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label3.Location = new System.Drawing.Point(20, 109);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(267, 13);
+            this.label3.Size = new System.Drawing.Size(307, 15);
             this.label3.TabIndex = 3;
             this.label3.Text = "制作人员：制作者、制作者、制作者、制作者";
             // 
@@ -93,7 +93,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(348, 239);
+            this.ClientSize = new System.Drawing.Size(359, 239);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -104,6 +104,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "About";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "关于…";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
