@@ -86,21 +86,21 @@
             // 直接输入ToolStripMenuItem
             // 
             this.直接输入ToolStripMenuItem.Name = "直接输入ToolStripMenuItem";
-            this.直接输入ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.直接输入ToolStripMenuItem.Size = new System.Drawing.Size(143, 24);
             this.直接输入ToolStripMenuItem.Text = "直接输入";
             this.直接输入ToolStripMenuItem.Click += new System.EventHandler(this.直接输入ToolStripMenuItem_Click);
             // 
             // 从文件导入ToolStripMenuItem
             // 
             this.从文件导入ToolStripMenuItem.Name = "从文件导入ToolStripMenuItem";
-            this.从文件导入ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.从文件导入ToolStripMenuItem.Size = new System.Drawing.Size(143, 24);
             this.从文件导入ToolStripMenuItem.Text = "从文件导入";
             this.从文件导入ToolStripMenuItem.Click += new System.EventHandler(this.从文件导入ToolStripMenuItem_Click);
             // 
             // 重置ToolStripMenuItem
             // 
             this.重置ToolStripMenuItem.Name = "重置ToolStripMenuItem";
-            this.重置ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.重置ToolStripMenuItem.Size = new System.Drawing.Size(143, 24);
             this.重置ToolStripMenuItem.Text = "重置";
             // 
             // 导出ToolStripMenuItem
@@ -117,20 +117,20 @@
             // 站场数据ToolStripMenuItem
             // 
             this.站场数据ToolStripMenuItem.Name = "站场数据ToolStripMenuItem";
-            this.站场数据ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.站场数据ToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
             this.站场数据ToolStripMenuItem.Text = "站场数据";
             this.站场数据ToolStripMenuItem.Click += new System.EventHandler(this.站场数据ToolStripMenuItem_Click);
             // 
             // 站场事件记录ToolStripMenuItem
             // 
             this.站场事件记录ToolStripMenuItem.Name = "站场事件记录ToolStripMenuItem";
-            this.站场事件记录ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.站场事件记录ToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
             this.站场事件记录ToolStripMenuItem.Text = "站场事件记录";
             // 
             // 站场图片ToolStripMenuItem
             // 
             this.站场图片ToolStripMenuItem.Name = "站场图片ToolStripMenuItem";
-            this.站场图片ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.站场图片ToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
             this.站场图片ToolStripMenuItem.Text = "站场图片";
             // 
             // 设置ToolStripMenuItem
@@ -149,6 +149,7 @@
             this.修改保护口令ToolStripMenuItem.Name = "修改保护口令ToolStripMenuItem";
             this.修改保护口令ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.修改保护口令ToolStripMenuItem.Text = "修改保护口令";
+            this.修改保护口令ToolStripMenuItem.Click += new System.EventHandler(this.修改保护口令ToolStripMenuItem_Click);
             // 
             // 修改站场名ToolStripMenuItem
             // 

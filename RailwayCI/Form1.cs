@@ -117,5 +117,11 @@ namespace RailwayCI
                 MessageBox.Show("文件已成功保存到: " + filePath);// 可选：显示消息框确认文件已保存
             }
         }
+
+        private void 修改保护口令ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var PasswordForm = new Password();
+            PasswordForm.ShowDialog();
+        }
     }
 }
