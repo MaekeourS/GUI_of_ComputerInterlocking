@@ -37,6 +37,7 @@
             // textBox1
             // 
             this.textBox1.AcceptsReturn = true;
+            this.textBox1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.textBox1.Location = new System.Drawing.Point(19, 14);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
@@ -45,7 +46,7 @@
             // 
             // button1
             // 
-            this.button1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button1.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.button1.Location = new System.Drawing.Point(466, 305);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(80, 30);
@@ -56,7 +57,7 @@
             // 
             // button2
             // 
-            this.button2.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button2.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.button2.Location = new System.Drawing.Point(562, 305);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(80, 30);

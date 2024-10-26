@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Drawing.Imaging;
 
 namespace RailwayCI
 {
@@ -122,6 +123,47 @@ namespace RailwayCI
         {
             var PasswordForm = new Password();
             PasswordForm.ShowDialog();
+        }
+
+        private void 重置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StationData = "";
+        }
+
+        private void 站场图片ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (Bitmap bitmap = new Bitmap(this.Width, this.Height))// 创建一个Bitmap对象，其大小与当前窗口相同
+            {
+                using (Graphics g = Graphics.FromImage(bitmap))// 使用Graphics对象从当前窗口绘制图像到Bitmap
+                {
+                    g.CopyFromScreen(this.Location, Point.Empty, this.Size);
+                }
+                SaveFileDialog saveFileDialog = new SaveFileDialog// 使用SaveFileDialog让用户选择保存文件的位置
+                {
+                    Filter = "JPEG Image|*.jpg;*.jpeg|PNG Image|*.png|BMP Image|*.bmp",
+                    Title = "导出为"
+                };
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    switch (Path.GetExtension(saveFileDialog.FileName).ToLower())// 根据用户选择的文件格式保存图像
+                    {
+                        case ".jpg":
+                        case ".jpeg":
+                            bitmap.Save(saveFileDialog.FileName, ImageFormat.Jpeg);
+                            break;
+                        case ".png":
+                            bitmap.Save(saveFileDialog.FileName, ImageFormat.Png);
+                            break;
+                        case ".bmp":
+                            bitmap.Save(saveFileDialog.FileName, ImageFormat.Bmp);
+                            break;
+                        default:
+                            MessageBox.Show("Unsupported file format.");
+                            break;
+                    }
+                }
+            }
         }
     }
 }

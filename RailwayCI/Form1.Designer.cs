@@ -31,9 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.站场ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.直接输入ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.从文件导入ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.重置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.导出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.站场数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.站场事件记录ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,6 +52,9 @@
             this.toolStripStatusLabel9 = new System.Windows.Forms.ToolStripStatusLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.直接输入ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.从文件导入ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.重置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -80,28 +80,8 @@
             this.重置ToolStripMenuItem});
             this.站场ToolStripMenuItem.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.站场ToolStripMenuItem.Name = "站场ToolStripMenuItem";
-            this.站场ToolStripMenuItem.Size = new System.Drawing.Size(47, 23);
-            this.站场ToolStripMenuItem.Text = "站场";
-            // 
-            // 直接输入ToolStripMenuItem
-            // 
-            this.直接输入ToolStripMenuItem.Name = "直接输入ToolStripMenuItem";
-            this.直接输入ToolStripMenuItem.Size = new System.Drawing.Size(143, 24);
-            this.直接输入ToolStripMenuItem.Text = "直接输入";
-            this.直接输入ToolStripMenuItem.Click += new System.EventHandler(this.直接输入ToolStripMenuItem_Click);
-            // 
-            // 从文件导入ToolStripMenuItem
-            // 
-            this.从文件导入ToolStripMenuItem.Name = "从文件导入ToolStripMenuItem";
-            this.从文件导入ToolStripMenuItem.Size = new System.Drawing.Size(143, 24);
-            this.从文件导入ToolStripMenuItem.Text = "从文件导入";
-            this.从文件导入ToolStripMenuItem.Click += new System.EventHandler(this.从文件导入ToolStripMenuItem_Click);
-            // 
-            // 重置ToolStripMenuItem
-            // 
-            this.重置ToolStripMenuItem.Name = "重置ToolStripMenuItem";
-            this.重置ToolStripMenuItem.Size = new System.Drawing.Size(143, 24);
-            this.重置ToolStripMenuItem.Text = "重置";
+            this.站场ToolStripMenuItem.Size = new System.Drawing.Size(65, 23);
+            this.站场ToolStripMenuItem.Text = "站场[&G]";
             // 
             // 导出ToolStripMenuItem
             // 
@@ -111,27 +91,28 @@
             this.站场图片ToolStripMenuItem});
             this.导出ToolStripMenuItem.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.导出ToolStripMenuItem.Name = "导出ToolStripMenuItem";
-            this.导出ToolStripMenuItem.Size = new System.Drawing.Size(47, 23);
-            this.导出ToolStripMenuItem.Text = "导出";
+            this.导出ToolStripMenuItem.Size = new System.Drawing.Size(66, 23);
+            this.导出ToolStripMenuItem.Text = "导出[&O]";
             // 
             // 站场数据ToolStripMenuItem
             // 
             this.站场数据ToolStripMenuItem.Name = "站场数据ToolStripMenuItem";
-            this.站场数据ToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
-            this.站场数据ToolStripMenuItem.Text = "站场数据";
+            this.站场数据ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.站场数据ToolStripMenuItem.Text = "站场数据[&D]";
             this.站场数据ToolStripMenuItem.Click += new System.EventHandler(this.站场数据ToolStripMenuItem_Click);
             // 
             // 站场事件记录ToolStripMenuItem
             // 
             this.站场事件记录ToolStripMenuItem.Name = "站场事件记录ToolStripMenuItem";
-            this.站场事件记录ToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
-            this.站场事件记录ToolStripMenuItem.Text = "站场事件记录";
+            this.站场事件记录ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.站场事件记录ToolStripMenuItem.Text = "站场事件记录[&M]";
             // 
             // 站场图片ToolStripMenuItem
             // 
             this.站场图片ToolStripMenuItem.Name = "站场图片ToolStripMenuItem";
-            this.站场图片ToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
-            this.站场图片ToolStripMenuItem.Text = "站场图片";
+            this.站场图片ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.站场图片ToolStripMenuItem.Text = "站场图片[&P]";
+            this.站场图片ToolStripMenuItem.Click += new System.EventHandler(this.站场图片ToolStripMenuItem_Click);
             // 
             // 设置ToolStripMenuItem
             // 
@@ -141,35 +122,35 @@
             this.校准当前时间ToolStripMenuItem});
             this.设置ToolStripMenuItem.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
-            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(47, 23);
-            this.设置ToolStripMenuItem.Text = "设置";
+            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(63, 23);
+            this.设置ToolStripMenuItem.Text = "设置[&S]";
             // 
             // 修改保护口令ToolStripMenuItem
             // 
             this.修改保护口令ToolStripMenuItem.Name = "修改保护口令ToolStripMenuItem";
             this.修改保护口令ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
-            this.修改保护口令ToolStripMenuItem.Text = "修改保护口令";
+            this.修改保护口令ToolStripMenuItem.Text = "修改保护口令[&P]";
             this.修改保护口令ToolStripMenuItem.Click += new System.EventHandler(this.修改保护口令ToolStripMenuItem_Click);
             // 
             // 修改站场名ToolStripMenuItem
             // 
             this.修改站场名ToolStripMenuItem.Name = "修改站场名ToolStripMenuItem";
             this.修改站场名ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
-            this.修改站场名ToolStripMenuItem.Text = "修改站场名";
+            this.修改站场名ToolStripMenuItem.Text = "修改站场名[&N]";
             this.修改站场名ToolStripMenuItem.Click += new System.EventHandler(this.修改站场名ToolStripMenuItem_Click);
             // 
             // 校准当前时间ToolStripMenuItem
             // 
             this.校准当前时间ToolStripMenuItem.Name = "校准当前时间ToolStripMenuItem";
             this.校准当前时间ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
-            this.校准当前时间ToolStripMenuItem.Text = "校准当前时间";
+            this.校准当前时间ToolStripMenuItem.Text = "校准当前时间[&T]";
             // 
             // 关于ToolStripMenuItem
             // 
             this.关于ToolStripMenuItem.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.关于ToolStripMenuItem.Name = "关于ToolStripMenuItem";
-            this.关于ToolStripMenuItem.Size = new System.Drawing.Size(47, 23);
-            this.关于ToolStripMenuItem.Text = "关于";
+            this.关于ToolStripMenuItem.Size = new System.Drawing.Size(64, 23);
+            this.关于ToolStripMenuItem.Text = "关于[&A]";
             this.关于ToolStripMenuItem.Click += new System.EventHandler(this.关于ToolStripMenuItem_Click);
             // 
             // statusStrip1
@@ -328,10 +309,31 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "时间";
             // 
+            // 直接输入ToolStripMenuItem
+            // 
+            this.直接输入ToolStripMenuItem.Name = "直接输入ToolStripMenuItem";
+            this.直接输入ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.直接输入ToolStripMenuItem.Text = "直接输入[&T]";
+            this.直接输入ToolStripMenuItem.Click += new System.EventHandler(this.直接输入ToolStripMenuItem_Click);
+            // 
+            // 从文件导入ToolStripMenuItem
+            // 
+            this.从文件导入ToolStripMenuItem.Name = "从文件导入ToolStripMenuItem";
+            this.从文件导入ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.从文件导入ToolStripMenuItem.Text = "从文件导入[&F]";
+            this.从文件导入ToolStripMenuItem.Click += new System.EventHandler(this.从文件导入ToolStripMenuItem_Click);
+            // 
+            // 重置ToolStripMenuItem
+            // 
+            this.重置ToolStripMenuItem.Name = "重置ToolStripMenuItem";
+            this.重置ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.重置ToolStripMenuItem.Text = "重置[&R]";
+            this.重置ToolStripMenuItem.Click += new System.EventHandler(this.重置ToolStripMenuItem_Click);
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.WindowText;
             this.ClientSize = new System.Drawing.Size(964, 568);
             this.Controls.Add(this.label2);
@@ -358,9 +360,6 @@
         private System.Windows.Forms.ToolStripMenuItem 导出ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 关于ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 直接输入ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 从文件导入ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 重置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 站场数据ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 站场事件记录ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 站场图片ToolStripMenuItem;
@@ -379,6 +378,9 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel9;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ToolStripMenuItem 直接输入ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 从文件导入ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 重置ToolStripMenuItem;
     }
 }
 
