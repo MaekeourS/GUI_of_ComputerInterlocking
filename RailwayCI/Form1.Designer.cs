@@ -119,6 +119,7 @@
             this.站场数据ToolStripMenuItem.Name = "站场数据ToolStripMenuItem";
             this.站场数据ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.站场数据ToolStripMenuItem.Text = "站场数据";
+            this.站场数据ToolStripMenuItem.Click += new System.EventHandler(this.站场数据ToolStripMenuItem_Click);
             // 
             // 站场事件记录ToolStripMenuItem
             // 

@@ -73,8 +73,7 @@ namespace RailwayCI
             var importingDataForm = new ImportingData();
             importingDataForm.textBox1.Text = StationData;
             importingDataForm.importingData += HandleimportingData;
-            importingDataForm.ShowDialog(this);
-            MessageBox.Show("文件内容: " + StationData);
+            importingDataForm.ShowDialog(this); 
         }
 
         private void 修改站场名ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -97,9 +96,25 @@ namespace RailwayCI
                     using (StreamReader reader = new StreamReader(openFileDialog.FileName))// 使用 StreamReader 读取文件内容
                     {
                         StationData = reader.ReadToEnd();
-                        MessageBox.Show("文件内容: " + StationData);
                     }
                 }
+            }
+        }
+
+        private void 站场数据ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();// 创建 SaveFileDialog 的实例
+            saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";// 设置过滤器，只允许保存文本文件
+            saveFileDialog.DefaultExt = "txt";// 设置默认文件扩展名为 .txt
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)// 显示对话框，如果用户点击了“保存”按钮则继续执行
+            {
+                string filePath = saveFileDialog.FileName;// 获取要保存的文件路径
+                string fileContent = StationData;// 要写入文件的字符串
+                using (StreamWriter writer = new StreamWriter(filePath))// 使用 StreamWriter 写入文件内容
+                {
+                    writer.Write(fileContent);
+                }
+                MessageBox.Show("文件已成功保存到: " + filePath);// 可选：显示消息框确认文件已保存
             }
         }
     }
