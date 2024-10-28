@@ -32,7 +32,11 @@ namespace RailwayCI
         public string StationName
         {
             get { return label1.Text; }
-            set { label1.Text = value; }
+            set 
+            { 
+                label1.Text = value; 
+                this.Text = "计算机联锁控显端仿真 —— "+value+" 站";
+            }
         }
         public string StationData = "";
 
@@ -56,7 +60,7 @@ namespace RailwayCI
             ToolStripStatusLabel ClickedStatusLabel = (ToolStripStatusLabel)sender;
             int i = int.Parse(ClickedStatusLabel.Name.Substring(20));
             if (ClickedStatusLabel.BackColor == Color.White)
-                ClickedStatusLabel.BackColor = Color.Silver;
+                ClickedStatusLabel.BackColor = SystemColors.GradientActiveCaption;
             else
                 ClickedStatusLabel.BackColor = Color.White;
             for (int j = 1; j <= 9; j++)
@@ -107,6 +111,7 @@ namespace RailwayCI
             SaveFileDialog saveFileDialog = new SaveFileDialog();// 创建 SaveFileDialog 的实例
             saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";// 设置过滤器，只允许保存文本文件
             saveFileDialog.DefaultExt = "txt";// 设置默认文件扩展名为 .txt
+            saveFileDialog.FileName = StationName + "站 站场数据";
             if (saveFileDialog.ShowDialog() == DialogResult.OK)// 显示对话框，如果用户点击了“保存”按钮则继续执行
             {
                 string filePath = saveFileDialog.FileName;// 获取要保存的文件路径
@@ -141,6 +146,7 @@ namespace RailwayCI
                 SaveFileDialog saveFileDialog = new SaveFileDialog// 使用SaveFileDialog让用户选择保存文件的位置
                 {
                     Filter = "JPEG Image|*.jpg;*.jpeg|PNG Image|*.png|BMP Image|*.bmp",
+                    FileName = StationName + "站站场图  " + DateTime.Now.ToString("yyyy年MM月dd日 HH时mm分ss秒"),
                     Title = "导出为"
                 };
 
