@@ -32,14 +32,14 @@ namespace RailwayCI
         public string StationName
         {
             get { return label1.Text; }
-            set 
-            { 
-                label1.Text = value; 
-                this.Text = "计算机联锁控显端仿真 —— "+value+" 站";
+            set
+            {
+                label1.Text = value;
+                this.Text = "计算机联锁控显端仿真 —— " + value + " 站";
             }
         }
         public string StationData = "";
-
+        public string Password = "";
         private void HandleNameChanged(string newName)
         {
             this.StationName = newName;
@@ -47,6 +47,10 @@ namespace RailwayCI
         private void HandleimportingData(string newData)
         {
             this.StationData = newData;
+        }
+        private void HandlePassword(string newPassword)
+        {
+            this.Password = newPassword;
         }
         private void 关于ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -78,7 +82,7 @@ namespace RailwayCI
             var importingDataForm = new ImportingData();
             importingDataForm.textBox1.Text = StationData;
             importingDataForm.importingData += HandleimportingData;
-            importingDataForm.ShowDialog(this); 
+            importingDataForm.ShowDialog(this);
         }
 
         private void 修改站场名ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -126,8 +130,23 @@ namespace RailwayCI
 
         private void 修改保护口令ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var PasswordForm = new Password();
-            PasswordForm.ShowDialog();
+
+            if (Password == "")
+            {
+                var PasswordForm = new Password();
+                PasswordForm.Text = "设置保护口令";
+                PasswordForm.PasswordChanged += HandlePassword;
+                PasswordForm.ShowDialog();
+            }
+            else
+            {
+                var PasswordForm = new Password();
+                PasswordForm.Text = "验证保护口令";
+                PasswordForm.OldPassword = Password;
+                PasswordForm.PasswordChanged += HandlePassword;
+                PasswordForm.ShowDialog();
+            }
+
         }
 
         private void 重置ToolStripMenuItem_Click(object sender, EventArgs e)

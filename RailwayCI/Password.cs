@@ -12,11 +12,17 @@ namespace RailwayCI
 {
     public partial class Password : Form
     {
+        public delegate void PasswordEventHandler(string password);
+
+        // 定义一个事件，基于上面的委托
+        public event PasswordEventHandler PasswordChanged;
         public Password()
         {
             InitializeComponent();
         }
 
+        public string OldPassword = "";
+        private bool isSettingNewPassword = false;
         private void button_Click(object sender, EventArgs e)
         {
             Button clickedbutton = (Button)sender;
@@ -36,10 +42,25 @@ namespace RailwayCI
         {
             this.Close();
         }
-
+        protected virtual void OnPasswordChanged(string newPassword)
+        {
+            PasswordChanged?.Invoke(newPassword);
+        }
         private void OKbutton_Click(object sender, EventArgs e)
         {
-
+            string newPassword = textBox1.Text;
+            if (this.Text == "设置保护口令")
+            {
+                OnPasswordChanged(newPassword);
+                this.Close();
+            }
+            else if (this.Text == "验证保护口令" && newPassword == OldPassword)
+            {
+                OnPasswordChanged("");
+                this.Close();
+                
+            }
+            else MessageBox.Show("口令错误");
         }
     }
 }
