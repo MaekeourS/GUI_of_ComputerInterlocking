@@ -40,6 +40,7 @@ namespace RailwayCI
         }
         public string StationData = "";
         public string Password = "";
+        public bool PasswordFlag = false;
         private void HandleNameChanged(string newName)
         {
             this.StationName = newName;
@@ -52,6 +53,10 @@ namespace RailwayCI
         {
             this.Password = newPassword;
         }
+        private void HandlePasswordFlag(bool newFlag)
+        {
+            this.PasswordFlag = newFlag;
+        }
         private void 关于ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var About = new About();
@@ -63,10 +68,11 @@ namespace RailwayCI
         {
             ToolStripStatusLabel ClickedStatusLabel = (ToolStripStatusLabel)sender;
             int i = int.Parse(ClickedStatusLabel.Name.Substring(20));
-            if (ClickedStatusLabel.BackColor == Color.White)
-                ClickedStatusLabel.BackColor = SystemColors.GradientActiveCaption;
-            else
+            if (ClickedStatusLabel.BackColor != Color.White)
+            {
                 ClickedStatusLabel.BackColor = Color.White;
+                return;
+            }
             for (int j = 1; j <= 9; j++)
             {
                 if (j != i)
@@ -75,6 +81,13 @@ namespace RailwayCI
                     Otherlabel.BackColor = Color.White;
                 }
             }
+            var PasswordForm = new Password();
+            PasswordForm.Text = "验证保护口令";
+            PasswordForm.OldPassword = Password;
+            PasswordForm.SettingNewPassword = false;
+            PasswordForm.FlagChecked += HandlePasswordFlag;
+            PasswordForm.ShowDialog();
+            if (!PasswordFlag) return; else ClickedStatusLabel.BackColor = SystemColors.GradientActiveCaption;
         }
 
         private void 直接输入ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -143,6 +156,7 @@ namespace RailwayCI
                 var PasswordForm = new Password();
                 PasswordForm.Text = "验证保护口令";
                 PasswordForm.OldPassword = Password;
+                PasswordForm.SettingNewPassword = true;
                 PasswordForm.PasswordChanged += HandlePassword;
                 PasswordForm.ShowDialog();
             }

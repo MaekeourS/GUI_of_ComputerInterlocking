@@ -16,13 +16,18 @@ namespace RailwayCI
 
         // 定义一个事件，基于上面的委托
         public event PasswordEventHandler PasswordChanged;
+
+        public delegate void PasswordFlagEventHandler(bool flag);
+
+        // 定义一个事件，基于上面的委托
+        public event PasswordFlagEventHandler FlagChecked;
         public Password()
         {
             InitializeComponent();
         }
 
         public string OldPassword = "";
-        private bool isSettingNewPassword = false;
+        public bool SettingNewPassword;
         private void button_Click(object sender, EventArgs e)
         {
             Button clickedbutton = (Button)sender;
@@ -46,6 +51,10 @@ namespace RailwayCI
         {
             PasswordChanged?.Invoke(newPassword);
         }
+        protected virtual void OnFlagChecked(bool flag)
+        {
+            FlagChecked?.Invoke(flag);
+        }
         private void OKbutton_Click(object sender, EventArgs e)
         {
             string newPassword = textBox1.Text;
@@ -56,11 +65,19 @@ namespace RailwayCI
             }
             else if (this.Text == "验证保护口令" && newPassword == OldPassword)
             {
-                OnPasswordChanged("");
+                bool newFlag = true;
+                if(SettingNewPassword)
+                    OnPasswordChanged("");
+                else OnFlagChecked(newFlag);
                 this.Close();
                 
             }
-            else MessageBox.Show("口令错误");
+            else
+            {
+                MessageBox.Show("口令错误");
+                textBox1.Clear();
+            }
+
         }
     }
 }
