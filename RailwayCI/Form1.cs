@@ -29,6 +29,7 @@ namespace RailwayCI
         public string StationData = "";
         public string Password = "";
         public bool PasswordFlag = false;
+        public int SectionNumber = 0;
         public enum Types { track, turnout, frog, trainSignal, shunttingSignal, multifunctionSignal };
         public enum OccupancyStates { available, occupied, breakdown };
         public enum RoutePoints { starting, turning, ending };
@@ -52,7 +53,7 @@ namespace RailwayCI
             public LineShape Rail;
             public SignalPaintings SignalPainting;
         }
-
+        PartsOfStations[] PartsOfStation = new PartsOfStations[100];
         public class SignalPaintings
         {
             //信号机绘图部件，待补全
@@ -96,13 +97,14 @@ namespace RailwayCI
 
         public void DataTransforming()
         {
-            PartsOfStations[] PartsOfStation = new PartsOfStations[100];
+
             string[] EachDatas = StationData.Split(';');
             int i = 0;
             foreach (string EachData in EachDatas)
             {
                 string[] Details = EachData.Split(',');
                 int typeFlag = 0;
+                PartsOfStation[i] = new PartsOfStations();
                 switch (Details[0])
                 {
                     case "轨道":
@@ -123,20 +125,20 @@ namespace RailwayCI
                 {
                     case 0:
                         PartsOfStation[i].Length = int.Parse(Details[2]);
-                        PartsOfStation[i].LeftName = Details[3];
-                        PartsOfStation[i].RightName = Details[4];
+                        PartsOfStation[i].LeftName = Details[3] == "null" ? "" : Details[3];
+                        PartsOfStation[i].RightName = Details[4] == "null" ? "" : Details[4];
                         break;
                     case 1:
                         PartsOfStation[i].Directions = Details[2];
-                        PartsOfStation[i].UpName = Details[3];
-                        PartsOfStation[i].DownName = Details[4];
+                        PartsOfStation[i].UpName = Details[3] == "null" ? "" : Details[3];
+                        PartsOfStation[i].DownName = Details[4] == "null" ? "" : Details[4];
                         break;
                     case 2:
                         PartsOfStation[i].Directions = Details[2];
-                        PartsOfStation[i].LeftName = Details[3];
-                        PartsOfStation[i].RightName = Details[4];
-                        PartsOfStation[i].UpName = Details[5];
-                        PartsOfStation[i].DownName = Details[6];
+                        PartsOfStation[i].LeftName = Details[3] == "null" ? "" : Details[3];
+                        PartsOfStation[i].RightName = Details[4] == "null" ? "" : Details[4];
+                        PartsOfStation[i].UpName = Details[5] == "null" ? "" : Details[5];
+                        PartsOfStation[i].DownName = Details[6] == "null" ? "" : Details[6];
                         break;
                     case 3:
                     case 4:
@@ -149,11 +151,64 @@ namespace RailwayCI
                 }
                 i++;
             }
+            SectionNumber = i;
             DataConnecting();
         }
-        public void DataConnecting()//建立部件间引用，待补全
+        public void DataConnecting()//建立部件间引用
         {
-
+            for (int i = 0; i < SectionNumber; i++)
+            {
+                if (PartsOfStation[i].TypeOfParts <= Types.frog)
+                {
+                    if (PartsOfStation[i].LeftName != "" && PartsOfStation[i].Left != null)
+                        for (int j = 0; j < SectionNumber; j++)
+                        {
+                            if (PartsOfStation[j].NameOfParts == PartsOfStation[i].LeftName)
+                            {
+                                PartsOfStation[i].Left = PartsOfStation[j];
+                                PartsOfStation[j].Right = PartsOfStation[i];
+                            }
+                        }
+                    if (PartsOfStation[i].RightName != "" && PartsOfStation[i].Right != null)
+                        for (int j = 0; j < SectionNumber; j++)
+                        {
+                            if (PartsOfStation[j].NameOfParts == PartsOfStation[i].RightName)
+                            {
+                                PartsOfStation[i].Right = PartsOfStation[j];
+                                PartsOfStation[j].Left = PartsOfStation[i];
+                            }
+                        }
+                    if (PartsOfStation[i].UpName != "" && PartsOfStation[i].Up != null)
+                        for (int j = 0; j < SectionNumber; j++)
+                        {
+                            if (PartsOfStation[j].NameOfParts == PartsOfStation[i].UpName)
+                            {
+                                PartsOfStation[i].Up = PartsOfStation[j];
+                                PartsOfStation[j].Down = PartsOfStation[i];
+                            }
+                        }
+                    if (PartsOfStation[i].DownName != "" && PartsOfStation[i].Down != null)
+                        for (int j = 0; j < SectionNumber; j++)
+                        {
+                            if (PartsOfStation[j].NameOfParts == PartsOfStation[i].DownName)
+                            {
+                                PartsOfStation[i].Down = PartsOfStation[j];
+                                PartsOfStation[j].Up = PartsOfStation[i];
+                            }
+                        }
+                }
+                else
+                {
+                    if (PartsOfStation[i].LeftName != "")
+                        for (int j = 0; j < SectionNumber; j++)
+                            if (PartsOfStation[j].NameOfParts == PartsOfStation[i].LeftName)
+                                PartsOfStation[i].Left = PartsOfStation[j];
+                    else
+                        for (int k = 0; k < SectionNumber; k++)
+                            if (PartsOfStation[k].NameOfParts == PartsOfStation[i].RightName)
+                                PartsOfStation[i].Right = PartsOfStation[k];
+                }
+            }
         }
         private void toolStripStatusLabel_Click(object sender, EventArgs e)
         {
