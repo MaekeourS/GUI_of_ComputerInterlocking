@@ -38,10 +38,14 @@ namespace RailwayCI
             public PartsOfStations Down;
             public PartsOfStations Left;
             public PartsOfStations Right;
+            public string UpName;
+            public string DownName;
+            public string LeftName;
+            public string RightName;
             public string NameOfParts;
             public Types TypeOfParts;
             public int Length;
-            public int Directions;
+            public string Directions;
             public int Conditions;
             public OccupancyStates OccupancyState;
             public RoutePoints RoutePoint;
@@ -74,6 +78,7 @@ namespace RailwayCI
         private void HandleimportingData(string newData)
         {
             this.StationData = newData;
+            DataTransforming();
         }
         private void HandlePassword(string newPassword)
         {
@@ -94,10 +99,61 @@ namespace RailwayCI
             PartsOfStations[] PartsOfStation = new PartsOfStations[100];
             string[] EachDatas = StationData.Split(';');
             int i = 0;
-            foreach(string EachData in EachDatas)
+            foreach (string EachData in EachDatas)
             {
-                string[] Details = EachData.Split(','); 
+                string[] Details = EachData.Split(',');
+                int typeFlag = 0;
+                switch (Details[0])
+                {
+                    case "轨道":
+                        PartsOfStation[i].TypeOfParts = Types.track; typeFlag = 0; break;
+                    case "道岔":
+                        PartsOfStation[i].TypeOfParts = Types.turnout; typeFlag = 1; break;
+                    case "辙叉":
+                        PartsOfStation[i].TypeOfParts = Types.frog; typeFlag = 2; break;
+                    case "列车信号机":
+                        PartsOfStation[i].TypeOfParts = Types.trainSignal; typeFlag = 3; break;
+                    case "调车信号机":
+                        PartsOfStation[i].TypeOfParts = Types.shunttingSignal; typeFlag = 4; break;
+                    case "列车调车信号机":
+                        PartsOfStation[i].TypeOfParts = Types.multifunctionSignal; typeFlag = 5; break;
+                }
+                PartsOfStation[i].NameOfParts = Details[1];
+                switch (typeFlag)
+                {
+                    case 0:
+                        PartsOfStation[i].Length = int.Parse(Details[2]);
+                        PartsOfStation[i].LeftName = Details[3];
+                        PartsOfStation[i].RightName = Details[4];
+                        break;
+                    case 1:
+                        PartsOfStation[i].Directions = Details[2];
+                        PartsOfStation[i].UpName = Details[3];
+                        PartsOfStation[i].DownName = Details[4];
+                        break;
+                    case 2:
+                        PartsOfStation[i].Directions = Details[2];
+                        PartsOfStation[i].LeftName = Details[3];
+                        PartsOfStation[i].RightName = Details[4];
+                        PartsOfStation[i].UpName = Details[5];
+                        PartsOfStation[i].DownName = Details[6];
+                        break;
+                    case 3:
+                    case 4:
+                    case 5:
+                        PartsOfStation[i].Directions = Details[2];
+                        if (Details[4] == "L")
+                            PartsOfStation[i].LeftName = Details[3];
+                        else PartsOfStation[i].RightName = Details[3];
+                        break;
+                }
+                i++;
             }
+            DataConnecting();
+        }
+        public void DataConnecting()//建立部件间引用，待补全
+        {
+
         }
         private void toolStripStatusLabel_Click(object sender, EventArgs e)
         {
