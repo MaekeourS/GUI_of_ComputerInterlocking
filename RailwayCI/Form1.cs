@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Drawing.Imaging;
+using Microsoft.VisualBasic.PowerPacks;
 
 namespace RailwayCI
 {
@@ -25,10 +26,34 @@ namespace RailwayCI
             timer.Tick += Timer_Tick; // 绑定Tick事件处理器  
             timer.Start(); // 启动计时器  
         }
-        private void Timer_Tick(object sender, EventArgs e)
+        public string StationData = "";
+        public string Password = "";
+        public bool PasswordFlag = false;
+        public enum Types { track, turnout, frog, trainSignal, shunttingSignal, multifunctionSignal };
+        public enum OccupancyStates { available, occupied, breakdown };
+        public enum RoutePoints { starting, turning, ending };
+        public class PartsOfStations
         {
-            label2.Text = DateTime.Now.ToString("yyyy年MM月dd日 HH时mm分ss秒"); // 更新Label文本为当前时间  
+            public PartsOfStations Up;
+            public PartsOfStations Down;
+            public PartsOfStations Left;
+            public PartsOfStations Right;
+            public string NameOfParts;
+            public Types TypeOfParts;
+            public int Length;
+            public int Directions;
+            public int Conditions;
+            public OccupancyStates OccupancyState;
+            public RoutePoints RoutePoint;
+            public LineShape Rail;
+            public SignalPaintings SignalPainting;
         }
+
+        public class SignalPaintings
+        {
+            //信号机绘图部件，待补全
+        }
+
         public string StationName
         {
             get { return label1.Text; }
@@ -38,9 +63,10 @@ namespace RailwayCI
                 this.Text = "计算机联锁控显端仿真 —— " + value + " 站";
             }
         }
-        public string StationData = "";
-        public string Password = "";
-        public bool PasswordFlag = false;
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            label2.Text = DateTime.Now.ToString("yyyy年MM月dd日 HH时mm分ss秒"); // 更新Label文本为当前时间  
+        }
         private void HandleNameChanged(string newName)
         {
             this.StationName = newName;
@@ -63,7 +89,16 @@ namespace RailwayCI
             About.ShowDialog();
         }
 
-
+        public void DataTransforming()
+        {
+            PartsOfStations[] PartsOfStation = new PartsOfStations[100];
+            string[] EachDatas = StationData.Split(';');
+            int i = 0;
+            foreach(string EachData in EachDatas)
+            {
+                string[] Details = EachData.Split(','); 
+            }
+        }
         private void toolStripStatusLabel_Click(object sender, EventArgs e)
         {
             ToolStripStatusLabel ClickedStatusLabel = (ToolStripStatusLabel)sender;
