@@ -153,6 +153,7 @@ namespace RailwayCI
             }
             SectionNumber = i;
             DataConnecting();
+            PartPainting();
         }
         public void DataConnecting()//建立部件间引用
         {
@@ -209,6 +210,10 @@ namespace RailwayCI
                                 PartsOfStation[i].Right = PartsOfStation[k];
                 }
             }
+        }
+        public void PartPainting()//绘图
+        {
+
         }
         private void toolStripStatusLabel_Click(object sender, EventArgs e)
         {
