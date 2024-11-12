@@ -53,6 +53,7 @@ namespace RailwayCI
             public RoutePoints RoutePoint;
             public LineShape Rail;
             public SignalPaintings SignalPainting;
+            public Label NameLabel;
         }
         PartsOfStations[] PartsOfStation = new PartsOfStations[100];
         public class SignalPaintings
@@ -130,11 +131,13 @@ namespace RailwayCI
                         PartsOfStation[i].RightName = Details[4] == "null" ? "" : Details[4];
                         break;
                     case 1:
+                        PartsOfStation[i].Length = 100;
                         PartsOfStation[i].Directions = Details[2];
                         PartsOfStation[i].UpName = Details[3] == "null" ? "" : Details[3];
                         PartsOfStation[i].DownName = Details[4] == "null" ? "" : Details[4];
                         break;
                     case 2:
+                        PartsOfStation[i].Length = 30;
                         PartsOfStation[i].Directions = Details[2];
                         PartsOfStation[i].LeftName = Details[3] == "null" ? "" : Details[3];
                         PartsOfStation[i].RightName = Details[4] == "null" ? "" : Details[4];
@@ -225,56 +228,114 @@ namespace RailwayCI
         }
         public void PartPainting()//绘图
         {
-            int Xpoint = 200, Ypoint = 200;
+            int Xpoint = 200, Ypoint = 500;
             ShapeContainer shapeContainer = new ShapeContainer();
             shapeContainer.Location = new System.Drawing.Point(0, 0);
             shapeContainer.Size = this.Size;
-            EachPartPainting(PartsOfStation[1], Xpoint, Ypoint, true, shapeContainer);
+            EachPartPainting(PartsOfStation[0], Xpoint, Ypoint, shapeContainer, true);
             this.Controls.Add(shapeContainer);
         }
-        public void EachPartPainting(PartsOfStations thisPart, int Xpoint, int Ypoint, Boolean FromLeft, ShapeContainer shapeContainer)
+        public void EachPartPainting(PartsOfStations thisPart, int Xpoint, int Ypoint, ShapeContainer shapeContainer, Boolean Direction)
         {
             if (thisPart.TypeOfParts == Types.track)
             {
                 thisPart.Rail = new LineShape();
-                if (FromLeft)
-                {
-                    thisPart.Rail.X1 = Xpoint;
-                    thisPart.Rail.Y1 = Ypoint;
-                    Xpoint += thisPart.Length;
-                    thisPart.Rail.X2 = Xpoint;
-                    thisPart.Rail.Y2 = Ypoint;
-                }
-                else
-                {
-                    thisPart.Rail.X2 = Xpoint;
-                    thisPart.Rail.Y2 = Ypoint;
-                    Xpoint -= thisPart.Length;
-                    thisPart.Rail.X1 = Xpoint;
-                    thisPart.Rail.Y1 = Ypoint;
-                }
+                thisPart.Rail.X1 = Xpoint;
+                thisPart.Rail.Y1 = Ypoint;
+                thisPart.Rail.X2 = Xpoint + thisPart.Length;
+                thisPart.Rail.Y2 = Ypoint;
             }
             else if (thisPart.TypeOfParts == Types.frog)
             {
                 thisPart.Rail = new LineShape();
-                if (FromLeft)
+                if (thisPart.Left == null)
+                    if (thisPart.Directions == "上捺")
+                    {
+                        thisPart.Rail.X1 = Xpoint;
+                        thisPart.Rail.Y1 = Ypoint - thisPart.Length;
+                        thisPart.Rail.X2 = Xpoint + thisPart.Length;
+                        thisPart.Rail.Y2 = Ypoint;
+                    }
+                    else
+                    {
+                        thisPart.Rail.X1 = Xpoint;
+                        thisPart.Rail.Y1 = Ypoint + thisPart.Length;
+                        thisPart.Rail.X2 = Xpoint + thisPart.Length;
+                        thisPart.Rail.Y2 = Ypoint;
+                    }
+                else if (thisPart.Right == null)
+                    if(thisPart.Directions == "上撇")
+                    {
+                        thisPart.Rail.X1 = Xpoint;
+                        thisPart.Rail.Y1 = Ypoint;
+                        thisPart.Rail.X2 = Xpoint + thisPart.Length;
+                        thisPart.Rail.Y2 = Ypoint - thisPart.Length;
+                    }
+                    else
+                    {
+                        thisPart.Rail.X1 = Xpoint;
+                        thisPart.Rail.Y1 = Ypoint;
+                        thisPart.Rail.X2 = Xpoint + thisPart.Length;
+                        thisPart.Rail.Y2 = Ypoint + thisPart.Length;
+                    }
+                else
                 {
                     thisPart.Rail.X1 = Xpoint;
                     thisPart.Rail.Y1 = Ypoint;
-                    Xpoint += 20;
-                    thisPart.Rail.X2 = Xpoint;
+                    thisPart.Rail.X2 = Xpoint + thisPart.Length;
                     thisPart.Rail.Y2 = Ypoint;
+                }
+
+            }
+            else if (thisPart.TypeOfParts == Types.turnout)
+            {
+                thisPart.Rail = new LineShape();
+                if (Direction)
+                {
+                    Ypoint -= 30;
+                    if (thisPart.Directions == "撇形")
+                    {
+                        Xpoint += 30;
+                        thisPart.Rail.X1 = Xpoint;
+                        thisPart.Rail.Y1 = Ypoint + thisPart.Length;
+                        Xpoint = Xpoint + thisPart.Length;
+                        thisPart.Rail.X2 = Xpoint;
+                        thisPart.Rail.Y2 = Ypoint;
+                    }
+                    else
+                    {
+                        Xpoint -= 30;
+                        thisPart.Rail.X1 = Xpoint;
+                        thisPart.Rail.Y1 = Ypoint;
+                        Xpoint = Xpoint - thisPart.Length;
+                        thisPart.Rail.X2 = Xpoint;
+                        thisPart.Rail.Y2 = Ypoint + thisPart.Length;
+                    }
                 }
                 else
                 {
-                    thisPart.Rail.X2 = Xpoint;
-                    thisPart.Rail.Y2 = Ypoint;
-                    Xpoint -= 20;
-                    thisPart.Rail.X1 = Xpoint;
-                    thisPart.Rail.Y1 = Ypoint;
+                    Ypoint += 30;
+                    if (thisPart.Directions == "撇形")
+                    {
+                        Xpoint -= 30;
+                        thisPart.Rail.X1 = Xpoint;
+                        thisPart.Rail.Y1 = Ypoint;
+                        Xpoint = Xpoint - thisPart.Length;
+                        thisPart.Rail.X2 = Xpoint;
+                        thisPart.Rail.Y2 = Ypoint + thisPart.Length;
+                    }
+                    else
+                    {
+                        Xpoint += 30;
+                        thisPart.Rail.X1 = Xpoint;
+                        thisPart.Rail.Y1 = Ypoint;
+                        Xpoint = Xpoint + thisPart.Length;
+                        thisPart.Rail.X2 = Xpoint;
+                        thisPart.Rail.Y2 = Ypoint + thisPart.Length;
+                    }
                 }
             }
-            thisPart.Rail.BorderWidth = 5;
+            thisPart.Rail.BorderWidth = 10;
             thisPart.Rail.BorderColor = Color.Aqua;
             shapeContainer.Shapes.Add(thisPart.Rail);
             /*
@@ -282,10 +343,10 @@ namespace RailwayCI
             */
 
             thisPart.Painted = true;
-            if (thisPart.Right != null && !thisPart.Right.Painted) EachPartPainting(thisPart.Right, Xpoint, Ypoint, true, shapeContainer);
-            if (thisPart.Up != null && !thisPart.Up.Painted) EachPartPainting(thisPart.Up, Xpoint, Ypoint, true, shapeContainer);
-            if (thisPart.Down != null && !thisPart.Down.Painted) EachPartPainting(thisPart.Down, Xpoint, Ypoint, true, shapeContainer);
-            if (thisPart.Left != null && !thisPart.Left.Painted) EachPartPainting(thisPart.Left, Xpoint, Ypoint, false, shapeContainer);
+            if (thisPart.Right != null && !thisPart.Right.Painted) EachPartPainting(thisPart.Right, Xpoint + thisPart.Length, Ypoint, shapeContainer, false);
+            if (thisPart.Up != null && !thisPart.Up.Painted) EachPartPainting(thisPart.Up, Xpoint, Ypoint - thisPart.Up.Length, shapeContainer, true);
+            if (thisPart.Down != null && !thisPart.Down.Painted) EachPartPainting(thisPart.Down, Xpoint, Ypoint + thisPart.Length, shapeContainer, false);
+            if (thisPart.Left != null && !thisPart.Left.Painted) EachPartPainting(thisPart.Left, Xpoint - thisPart.Left.Length, Ypoint, shapeContainer, false);
         }
         private void toolStripStatusLabel_Click(object sender, EventArgs e)
         {
