@@ -48,6 +48,7 @@ namespace RailwayCI
             public int Length;
             public string Directions;
             public int Conditions;
+            public Boolean Painted = false;
             public OccupancyStates OccupancyState;
             public RoutePoints RoutePoint;
             public LineShape Rail;
@@ -161,40 +162,44 @@ namespace RailwayCI
             {
                 if (PartsOfStation[i].TypeOfParts <= Types.frog)
                 {
-                    if (PartsOfStation[i].LeftName != "" && PartsOfStation[i].Left != null)
+                    if (PartsOfStation[i].LeftName != "" && PartsOfStation[i].Left == null)
                         for (int j = 0; j < SectionNumber; j++)
                         {
                             if (PartsOfStation[j].NameOfParts == PartsOfStation[i].LeftName)
                             {
                                 PartsOfStation[i].Left = PartsOfStation[j];
                                 PartsOfStation[j].Right = PartsOfStation[i];
+                                break;
                             }
                         }
-                    if (PartsOfStation[i].RightName != "" && PartsOfStation[i].Right != null)
+                    if (PartsOfStation[i].RightName != "" && PartsOfStation[i].Right == null)
                         for (int j = 0; j < SectionNumber; j++)
                         {
                             if (PartsOfStation[j].NameOfParts == PartsOfStation[i].RightName)
                             {
                                 PartsOfStation[i].Right = PartsOfStation[j];
                                 PartsOfStation[j].Left = PartsOfStation[i];
+                                break;
                             }
                         }
-                    if (PartsOfStation[i].UpName != "" && PartsOfStation[i].Up != null)
+                    if (PartsOfStation[i].UpName != "" && PartsOfStation[i].Up == null)
                         for (int j = 0; j < SectionNumber; j++)
                         {
                             if (PartsOfStation[j].NameOfParts == PartsOfStation[i].UpName)
                             {
                                 PartsOfStation[i].Up = PartsOfStation[j];
                                 PartsOfStation[j].Down = PartsOfStation[i];
+                                break;
                             }
                         }
-                    if (PartsOfStation[i].DownName != "" && PartsOfStation[i].Down != null)
+                    if (PartsOfStation[i].DownName != "" && PartsOfStation[i].Down == null)
                         for (int j = 0; j < SectionNumber; j++)
                         {
                             if (PartsOfStation[j].NameOfParts == PartsOfStation[i].DownName)
                             {
                                 PartsOfStation[i].Down = PartsOfStation[j];
                                 PartsOfStation[j].Up = PartsOfStation[i];
+                                break;
                             }
                         }
                 }
@@ -203,17 +208,64 @@ namespace RailwayCI
                     if (PartsOfStation[i].LeftName != "")
                         for (int j = 0; j < SectionNumber; j++)
                             if (PartsOfStation[j].NameOfParts == PartsOfStation[i].LeftName)
+                            {
                                 PartsOfStation[i].Left = PartsOfStation[j];
-                    else
-                        for (int k = 0; k < SectionNumber; k++)
-                            if (PartsOfStation[k].NameOfParts == PartsOfStation[i].RightName)
-                                PartsOfStation[i].Right = PartsOfStation[k];
+                                break;
+                            }
+                            else
+                                for (int k = 0; k < SectionNumber; k++)
+                                    if (PartsOfStation[k].NameOfParts == PartsOfStation[i].RightName)
+                                    {
+                                        PartsOfStation[i].Right = PartsOfStation[k];
+                                        break;
+                                    }
+
                 }
             }
         }
         public void PartPainting()//绘图
         {
+            int Xpoint = 200, Ypoint = 200;
+            ShapeContainer shapeContainer = new ShapeContainer();
+            shapeContainer.Location = new System.Drawing.Point(0, 0);
+            shapeContainer.Size = this.Size;
+            EachPartPainting(PartsOfStation[1], Xpoint, Ypoint, true, shapeContainer);
+            this.Controls.Add(shapeContainer);
+        }
+        public void EachPartPainting(PartsOfStations thisPart, int Xpoint, int Ypoint, Boolean FromLeft, ShapeContainer shapeContainer)
+        {
+            if (thisPart.TypeOfParts == Types.track)
+            {
+                thisPart.Rail = new LineShape();
+                if (FromLeft)
+                {
+                    thisPart.Rail.X1 = Xpoint;
+                    thisPart.Rail.Y1 = Ypoint;
+                    Xpoint += thisPart.Length;
+                    thisPart.Rail.X2 = Xpoint;
+                    thisPart.Rail.Y2 = Ypoint;
+                }
+                else
+                {
+                    thisPart.Rail.X2 = Xpoint;
+                    thisPart.Rail.Y2 = Ypoint;
+                    Xpoint -= thisPart.Length;
+                    thisPart.Rail.X1 = Xpoint;
+                    thisPart.Rail.Y1 = Ypoint;
+                }
+                thisPart.Rail.BorderWidth = 5;
+                thisPart.Rail.BorderColor = Color.Aqua;
+                shapeContainer.Shapes.Add(thisPart.Rail);
+            }
+            /*
+            各部件绘图，待补全
+            */
 
+            thisPart.Painted = true;
+            if (thisPart.Right != null && !thisPart.Right.Painted) EachPartPainting(thisPart.Right, Xpoint, Ypoint, true, shapeContainer);
+            if (thisPart.Up != null && !thisPart.Up.Painted) EachPartPainting(thisPart.Up, Xpoint, Ypoint, true, shapeContainer);
+            if (thisPart.Down != null && !thisPart.Down.Painted) EachPartPainting(thisPart.Down, Xpoint, Ypoint, true, shapeContainer);
+            if (thisPart.Left != null && !thisPart.Left.Painted) EachPartPainting(thisPart.Left, Xpoint, Ypoint, false, shapeContainer);
         }
         private void toolStripStatusLabel_Click(object sender, EventArgs e)
         {
