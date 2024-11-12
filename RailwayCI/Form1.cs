@@ -365,6 +365,7 @@ namespace RailwayCI
                     Otherlabel.BackColor = Color.White;
                 }
             }
+            PasswordFlag = false;
             var PasswordForm = new Password();
             PasswordForm.Text = "验证保护口令";
             PasswordForm.OldPassword = Password;
