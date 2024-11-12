@@ -253,10 +253,30 @@ namespace RailwayCI
                     thisPart.Rail.X1 = Xpoint;
                     thisPart.Rail.Y1 = Ypoint;
                 }
-                thisPart.Rail.BorderWidth = 5;
-                thisPart.Rail.BorderColor = Color.Aqua;
-                shapeContainer.Shapes.Add(thisPart.Rail);
             }
+            else if (thisPart.TypeOfParts == Types.frog)
+            {
+                thisPart.Rail = new LineShape();
+                if (FromLeft)
+                {
+                    thisPart.Rail.X1 = Xpoint;
+                    thisPart.Rail.Y1 = Ypoint;
+                    Xpoint += 20;
+                    thisPart.Rail.X2 = Xpoint;
+                    thisPart.Rail.Y2 = Ypoint;
+                }
+                else
+                {
+                    thisPart.Rail.X2 = Xpoint;
+                    thisPart.Rail.Y2 = Ypoint;
+                    Xpoint -= 20;
+                    thisPart.Rail.X1 = Xpoint;
+                    thisPart.Rail.Y1 = Ypoint;
+                }
+            }
+            thisPart.Rail.BorderWidth = 5;
+            thisPart.Rail.BorderColor = Color.Aqua;
+            shapeContainer.Shapes.Add(thisPart.Rail);
             /*
             各部件绘图，待补全
             */
