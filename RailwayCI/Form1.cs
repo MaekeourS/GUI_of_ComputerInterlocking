@@ -403,6 +403,7 @@ namespace RailwayCI
                     using (StreamReader reader = new StreamReader(openFileDialog.FileName))// 使用 StreamReader 读取文件内容
                     {
                         StationData = reader.ReadToEnd();
+                        DataTransforming();
                     }
                 }
             }
@@ -451,6 +452,29 @@ namespace RailwayCI
         private void 重置ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             StationData = "";
+            for (int i = 0; i < PartsOfStation.Length; i++)
+            {
+                if (PartsOfStation[i] != null)// 如果PartsOfStations实例包含LineShape或NameLabel，也需要从父控件中移除它们
+                {
+                    if (PartsOfStation[i].Rail != null)
+                    {
+                        PartsOfStation[i].Rail.Parent = null; // 从父控件移除LineShape
+                    }
+                    if (PartsOfStation[i].NameLabel != null)
+                    {
+                        PartsOfStation[i].NameLabel.Dispose(); // 处理NameLabel
+                    }
+                    PartsOfStation[i] = null;
+                }
+            }
+            if (this.Controls["shapeContainer"] is ShapeContainer shapeContainer)// 移除ShapeContainer中的所有LineShape
+            {
+                foreach (var shape in shapeContainer.Shapes)
+                {
+                        shapeContainer.Shapes.Remove((Shape)shape);
+                }
+            }
+            SectionNumber = 0;
         }
 
         private void 站场图片ToolStripMenuItem_Click(object sender, EventArgs e)
