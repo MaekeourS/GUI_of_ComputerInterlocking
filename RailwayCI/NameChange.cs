@@ -23,9 +23,13 @@ namespace RailwayCI
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            string newName = textBox1.Text;
-            OnNameChanged(newName);
-            this.Close();
+            if (textBox1.Text != "")
+            {
+                string newName = textBox1.Text;
+                OnNameChanged(newName);
+                this.Close();
+            }
+            else MessageBox.Show("站场名不能为空！");
         }
 
         protected virtual void OnNameChanged(string newName)
@@ -36,6 +40,15 @@ namespace RailwayCI
         private void button2_Click(object sender, EventArgs e)
         {
             this.Close();
+            if (textBox1.Text == "")
+                Application.Exit();
+        }
+
+        private void NameChange_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.Close();
+            if (textBox1.Text == "")
+                Application.Exit();
         }
     }
 }

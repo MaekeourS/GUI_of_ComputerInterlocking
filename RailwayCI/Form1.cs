@@ -26,7 +26,7 @@ namespace RailwayCI
             timer.Tick += Timer_Tick; // 绑定Tick事件处理器  
             timer.Start(); // 启动计时器  
         }
-        public string StationData = "";
+        public string StationData = "轨道,1G,150,null,1;辙叉,1,上撇,1G,2G,1/3,null;轨道,2G,280,1,null;道岔,1/3,撇形,1,3;辙叉,3,下撇,4G,3G,null,1/3;轨道,3G,150,3,null;轨道,4G,280,null,3";
         public string Password = "";
         public bool PasswordFlag = false;
         public int SectionNumber = 0;
@@ -264,7 +264,7 @@ namespace RailwayCI
                         thisPart.Rail.Y2 = Ypoint;
                     }
                 else if (thisPart.Right == null)
-                    if(thisPart.Directions == "上撇")
+                    if (thisPart.Directions == "上撇")
                     {
                         thisPart.Rail.X1 = Xpoint;
                         thisPart.Rail.Y1 = Ypoint;
@@ -338,6 +338,27 @@ namespace RailwayCI
             thisPart.Rail.BorderWidth = 10;
             thisPart.Rail.BorderColor = Color.Aqua;
             shapeContainer.Shapes.Add(thisPart.Rail);
+            if (thisPart.TypeOfParts == Types.track || thisPart.TypeOfParts == Types.frog)
+            {
+                thisPart.NameLabel = new Label
+                {
+                    Location = new System.Drawing.Point((thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - 15, thisPart.Rail.Y2 + 20),
+                    Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134))),
+                    Size = new System.Drawing.Size(40, 25),
+                    Text = thisPart.NameOfParts,
+                    ForeColor = System.Drawing.Color.White
+                };
+                if (thisPart.TypeOfParts == Types.frog && (thisPart.Directions == "下撇" || thisPart.Directions == "下捺"))
+                    thisPart.NameLabel.Location = new System.Drawing.Point((thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - 15, thisPart.Rail.Y2 - 40);
+                this.Controls.Add(thisPart.NameLabel);
+            }
+
+            /*
+            this.toolStripStatusLabel1.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(60, 23);
+            this.toolStripStatusLabel1.Text = " 总定位 ";
+            */
             /*
             各部件绘图，待补全
             */
@@ -386,6 +407,7 @@ namespace RailwayCI
         private void 修改站场名ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var nameChangeForm = new NameChange();
+            nameChangeForm.Text = "站场名称修改";
             nameChangeForm.textBox1.Text = StationName;
             nameChangeForm.NameChanged += HandleNameChanged;
             nameChangeForm.ShowDialog(this);
@@ -471,7 +493,7 @@ namespace RailwayCI
             {
                 foreach (var shape in shapeContainer.Shapes)
                 {
-                        shapeContainer.Shapes.Remove((Shape)shape);
+                    shapeContainer.Shapes.Remove((Shape)shape);
                 }
             }
             SectionNumber = 0;
@@ -512,6 +534,13 @@ namespace RailwayCI
                     }
                 }
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            var nameChangeForm = new NameChange();
+            nameChangeForm.NameChanged += HandleNameChanged;
+            nameChangeForm.ShowDialog(this);
         }
     }
 }
