@@ -21,11 +21,12 @@ namespace RailwayCI
         {
             InitializeComponent();
         }
+        public string newName = "";
         private void button1_Click(object sender, EventArgs e)
         {
             if (textBox1.Text != "")
             {
-                string newName = textBox1.Text;
+                newName = textBox1.Text;
                 OnNameChanged(newName);
                 this.Close();
             }
@@ -39,16 +40,16 @@ namespace RailwayCI
 
         private void button2_Click(object sender, EventArgs e)
         {
-            this.Close();
-            if (textBox1.Text == "")
+            if (newName == "")
                 Application.Exit();
+            this.Close();
         }
 
         private void NameChange_FormClosed(object sender, FormClosedEventArgs e)
         {
-            this.Close();
-            if (textBox1.Text == "")
+            if (newName == "")
                 Application.Exit();
+            this.Close();
         }
     }
 }

@@ -77,6 +77,7 @@ namespace RailwayCI
         private void HandleNameChanged(string newName)
         {
             this.StationName = newName;
+            NewTitleLocation();
         }
         private void HandleimportingData(string newData)
         {
@@ -541,6 +542,17 @@ namespace RailwayCI
             var nameChangeForm = new NameChange();
             nameChangeForm.NameChanged += HandleNameChanged;
             nameChangeForm.ShowDialog(this);
+        }
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            NewTitleLocation();
+        }
+
+        private void NewTitleLocation()
+        {
+            label1.Location = new Point(this.Width / 2 - label1.Size.Width - 80, label1.Location.Y);
+            label2.Location = new Point(this.Width / 2 + 50, label2.Location.Y);
         }
     }
 }
