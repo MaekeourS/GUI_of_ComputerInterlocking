@@ -51,5 +51,10 @@ namespace RailwayCI
                 Application.Exit();
             this.Close();
         }
+
+        private void NameChange_Load(object sender, EventArgs e)
+        {
+            newName = textBox1.Text;
+        }
     }
 }
