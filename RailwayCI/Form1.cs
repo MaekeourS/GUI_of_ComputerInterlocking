@@ -26,7 +26,7 @@ namespace RailwayCI
             timer.Tick += Timer_Tick; // 绑定Tick事件处理器  
             timer.Start(); // 启动计时器  
         }
-        public string StationData = "轨道,1G,150,null,1;辙叉,1,上撇,1G,2G,1/3,null;轨道,2G,280,1,null;道岔,1/3,撇形,1,3;辙叉,3,下撇,4G,3G,null,1/3;轨道,3G,150,3,null;轨道,4G,280,null,3";
+        public string StationData = "轨道,1G,150,null,1;辙叉,1,上撇,1G,2G,1/3,null;轨道,2G,280,1,null;道岔,1/3,撇形,1,3;辙叉,3,下撇,4G,3G,null,1/3;轨道,3G,150,3,null;轨道,4G,280,null,3;列车信号机,X,1,3G,R";
         public string Password = "";
         public bool PasswordFlag = false;
         public int SectionNumber = 0;
@@ -58,6 +58,11 @@ namespace RailwayCI
         PartsOfStations[] PartsOfStation = new PartsOfStations[100];
         public class SignalPaintings
         {
+            public LineShape BaseLine;
+            public OvalShape DownLight;
+            public OvalShape UpLight;
+            public RectangleShape TrainButton;
+            public RectangleShape ShuntingButton;
             //信号机绘图部件，待补全
         }
 
@@ -150,8 +155,17 @@ namespace RailwayCI
                     case 5:
                         PartsOfStation[i].Directions = Details[2];
                         if (Details[4] == "L")
+                        {
                             PartsOfStation[i].LeftName = Details[3];
-                        else PartsOfStation[i].RightName = Details[3];
+                            PartsOfStation[i].RightName = "";
+                        }
+
+                        else
+                        {
+                            PartsOfStation[i].RightName = Details[3];
+                            PartsOfStation[i].LeftName = "";
+                        }
+
                         break;
                 }
                 i++;
@@ -209,20 +223,25 @@ namespace RailwayCI
                 }
                 else
                 {
-                    if (PartsOfStation[i].LeftName != "")
+                    if (PartsOfStation[i].RightName == "")
+                    {
                         for (int j = 0; j < SectionNumber; j++)
                             if (PartsOfStation[j].NameOfParts == PartsOfStation[i].LeftName)
                             {
                                 PartsOfStation[i].Left = PartsOfStation[j];
                                 break;
                             }
-                            else
-                                for (int k = 0; k < SectionNumber; k++)
-                                    if (PartsOfStation[k].NameOfParts == PartsOfStation[i].RightName)
-                                    {
-                                        PartsOfStation[i].Right = PartsOfStation[k];
-                                        break;
-                                    }
+                    }
+                    else
+                    {
+                        for (int k = 0; k < SectionNumber; k++)
+                            if (PartsOfStation[k].NameOfParts == PartsOfStation[i].RightName)
+                            {
+                                PartsOfStation[i].Right = PartsOfStation[k];
+                                break;
+                            }
+                    }
+
 
                 }
             }
@@ -234,7 +253,44 @@ namespace RailwayCI
             shapeContainer.Location = new System.Drawing.Point(0, 0);
             shapeContainer.Size = this.Size;
             EachPartPainting(PartsOfStation[0], Xpoint, Ypoint, shapeContainer, true);
+            LightPainting(shapeContainer);
             this.Controls.Add(shapeContainer);
+        }
+        public void LightPainting(ShapeContainer shapeContainer)
+        {
+            for (int i = 0; i < SectionNumber; i++)
+            {
+                PartsOfStations thisPart = PartsOfStation[i];
+                int Height = thisPart.Directions == "上" ? -35 : 15;
+                if (thisPart.TypeOfParts == Types.trainSignal)
+                {
+                    thisPart.SignalPainting = new SignalPaintings();
+                    thisPart.SignalPainting.BaseLine = new LineShape();
+                    thisPart.SignalPainting.DownLight = new OvalShape();
+                    thisPart.SignalPainting.UpLight = new OvalShape();
+                    thisPart.SignalPainting.TrainButton = new RectangleShape();
+                    if (thisPart.Right != null)
+                    {
+                        thisPart.SignalPainting.BaseLine.X1 = thisPart.Right.Rail.X2;
+                        thisPart.SignalPainting.BaseLine.Y1 = thisPart.Right.Rail.Y2 + Height;
+                        thisPart.SignalPainting.BaseLine.X2 = thisPart.Right.Rail.X2;
+                        thisPart.SignalPainting.BaseLine.Y2 = thisPart.Right.Rail.Y2 + Height + 30;
+                        thisPart.SignalPainting.BaseLine.BorderWidth = 2;
+                        thisPart.SignalPainting.BaseLine.BorderColor = Color.White;
+                        shapeContainer.Shapes.Add(thisPart.SignalPainting.BaseLine);
+                    }
+                    else if (thisPart.Left != null)
+                    {
+                        thisPart.SignalPainting.BaseLine.X1 = thisPart.Left.Rail.X1;
+                        thisPart.SignalPainting.BaseLine.Y1 = thisPart.Left.Rail.Y1 + Height;
+                        thisPart.SignalPainting.BaseLine.X2 = thisPart.Left.Rail.X1;
+                        thisPart.SignalPainting.BaseLine.Y2 = thisPart.Left.Rail.Y1 + Height + 30;
+                        thisPart.SignalPainting.BaseLine.BorderWidth = 2;
+                        thisPart.SignalPainting.BaseLine.BorderColor = Color.White;
+                        shapeContainer.Shapes.Add(thisPart.SignalPainting.BaseLine);
+                    }
+                }
+            }
         }
         public void EachPartPainting(PartsOfStations thisPart, int Xpoint, int Ypoint, ShapeContainer shapeContainer, Boolean Direction)
         {
@@ -336,9 +392,14 @@ namespace RailwayCI
                     }
                 }
             }
-            thisPart.Rail.BorderWidth = 10;
-            thisPart.Rail.BorderColor = Color.Aqua;
-            shapeContainer.Shapes.Add(thisPart.Rail);
+
+            if (thisPart.Rail != null)
+            {
+                thisPart.Rail.BorderWidth = 10;
+                thisPart.Rail.BorderColor = Color.Aqua;
+                shapeContainer.Shapes.Add(thisPart.Rail);
+            }
+
             if (thisPart.TypeOfParts == Types.track || thisPart.TypeOfParts == Types.frog)
             {
                 thisPart.NameLabel = new Label
