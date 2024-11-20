@@ -26,7 +26,7 @@ namespace RailwayCI
             timer.Tick += Timer_Tick; // 绑定Tick事件处理器  
             timer.Start(); // 启动计时器  
         }
-        public string StationData = "轨道,1G,150,null,1;辙叉,1,上撇,1G,2G,1/3,null;轨道,2G,280,1,null;道岔,1/3,撇形,1,3;辙叉,3,下撇,4G,3G,null,1/3;轨道,3G,150,3,null;轨道,4G,280,null,3;列车信号机,X,1,3G,R";
+        public string StationData = "轨道,1G,150,null,1;辙叉,1,上撇,1G,2G,1/3,null;轨道,2G,280,1,null;道岔,1/3,撇形,1,3;辙叉,3,下撇,4G,3G,null,1/3;轨道,3G,150,3,null;轨道,4G,280,null,3;列车信号机,X,下方,2G,R;列车信号机,X,上方,4G,L";
         public string Password = "";
         public bool PasswordFlag = false;
         public int SectionNumber = 0;
@@ -261,7 +261,7 @@ namespace RailwayCI
             for (int i = 0; i < SectionNumber; i++)
             {
                 PartsOfStations thisPart = PartsOfStation[i];
-                int Height = thisPart.Directions == "上" ? -35 : 15;
+                int Height = thisPart.Directions == "上方" ? -45 : 20;
                 if (thisPart.TypeOfParts == Types.trainSignal)
                 {
                     thisPart.SignalPainting = new SignalPaintings();
@@ -278,6 +278,18 @@ namespace RailwayCI
                         thisPart.SignalPainting.BaseLine.BorderWidth = 2;
                         thisPart.SignalPainting.BaseLine.BorderColor = Color.White;
                         shapeContainer.Shapes.Add(thisPart.SignalPainting.BaseLine);
+                        thisPart.SignalPainting.DownLight.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 30,thisPart.SignalPainting.BaseLine.Y1);
+                        thisPart.SignalPainting.DownLight.Size = new Size(30, 30);
+                        thisPart.SignalPainting.DownLight.BorderColor = Color.White;
+                        thisPart.SignalPainting.DownLight.FillColor = Color.Red;
+                        thisPart.SignalPainting.DownLight.FillStyle = FillStyle.Solid;
+                        shapeContainer.Shapes.Add(thisPart.SignalPainting.DownLight);
+                        thisPart.SignalPainting.UpLight.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 60, thisPart.SignalPainting.BaseLine.Y1);
+                        thisPart.SignalPainting.UpLight.Size = new Size(30, 30);
+                        thisPart.SignalPainting.UpLight.BorderColor = Color.White;
+                        thisPart.SignalPainting.UpLight.FillColor = Color.Black;
+                        thisPart.SignalPainting.UpLight.FillStyle = FillStyle.Solid;
+                        shapeContainer.Shapes.Add(thisPart.SignalPainting.UpLight);
                     }
                     else if (thisPart.Left != null)
                     {
@@ -288,6 +300,18 @@ namespace RailwayCI
                         thisPart.SignalPainting.BaseLine.BorderWidth = 2;
                         thisPart.SignalPainting.BaseLine.BorderColor = Color.White;
                         shapeContainer.Shapes.Add(thisPart.SignalPainting.BaseLine);
+                        thisPart.SignalPainting.DownLight.Location = new Point(thisPart.SignalPainting.BaseLine.X1, thisPart.SignalPainting.BaseLine.Y1);
+                        thisPart.SignalPainting.DownLight.Size = new Size(30, 30);
+                        thisPart.SignalPainting.DownLight.BorderColor = Color.White;
+                        thisPart.SignalPainting.DownLight.FillColor = Color.Red;
+                        thisPart.SignalPainting.DownLight.FillStyle = FillStyle.Solid;
+                        shapeContainer.Shapes.Add(thisPart.SignalPainting.DownLight);
+                        thisPart.SignalPainting.UpLight.Location = new Point(thisPart.SignalPainting.BaseLine.X1 + 30, thisPart.SignalPainting.BaseLine.Y1);
+                        thisPart.SignalPainting.UpLight.Size = new Size(30, 30);
+                        thisPart.SignalPainting.UpLight.BorderColor = Color.White;
+                        thisPart.SignalPainting.UpLight.FillColor = Color.Black;
+                        thisPart.SignalPainting.UpLight.FillStyle = FillStyle.Solid;
+                        shapeContainer.Shapes.Add(thisPart.SignalPainting.UpLight);
                     }
                 }
             }
