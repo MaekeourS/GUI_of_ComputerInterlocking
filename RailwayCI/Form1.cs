@@ -26,7 +26,7 @@ namespace RailwayCI
             timer.Tick += Timer_Tick; // 绑定Tick事件处理器  
             timer.Start(); // 启动计时器  
         }
-        public string StationData = "轨道,1G,150,null,1;辙叉,1,上撇,1G,2G,1/3,null;轨道,2G,280,1,null;道岔,1/3,撇形,1,3;辙叉,3,下撇,4G,3G,null,1/3;轨道,3G,150,3,null;轨道,4G,280,null,3;列车信号机,X,下方,2G,R;列车信号机,X,上方,4G,L";
+        public string StationData = "轨道,1G,150,null,1;辙叉,1,上撇,1G,2G,1/3,null;轨道,2G,280,1,null;道岔,1/3,撇形,1,3;辙叉,3,下撇,4G,3G,null,1/3;轨道,3G,150,3,null;轨道,4G,280,null,3;列车信号机,X,下方,2G,R;调车信号机,D1,上方,4G,L;列车调车信号机,D2,上方,3G,R";
         public string Password = "";
         public bool PasswordFlag = false;
         public int SectionNumber = 0;
@@ -262,13 +262,14 @@ namespace RailwayCI
             {
                 PartsOfStations thisPart = PartsOfStation[i];
                 int Height = thisPart.Directions == "上方" ? -45 : 20;
-                if (thisPart.TypeOfParts == Types.trainSignal)
+                if (thisPart.TypeOfParts >= Types.trainSignal)
                 {
                     thisPart.SignalPainting = new SignalPaintings();
                     thisPart.SignalPainting.BaseLine = new LineShape();
                     thisPart.SignalPainting.DownLight = new OvalShape();
                     thisPart.SignalPainting.UpLight = new OvalShape();
                     thisPart.SignalPainting.TrainButton = new RectangleShape();
+                    thisPart.SignalPainting.ShuntingButton = new RectangleShape();
                     if (thisPart.Right != null)
                     {
                         thisPart.SignalPainting.BaseLine.X1 = thisPart.Right.Rail.X2;
@@ -278,18 +279,50 @@ namespace RailwayCI
                         thisPart.SignalPainting.BaseLine.BorderWidth = 2;
                         thisPart.SignalPainting.BaseLine.BorderColor = Color.White;
                         shapeContainer.Shapes.Add(thisPart.SignalPainting.BaseLine);
-                        thisPart.SignalPainting.DownLight.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 30,thisPart.SignalPainting.BaseLine.Y1);
+                        thisPart.SignalPainting.DownLight.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 30, thisPart.SignalPainting.BaseLine.Y1);
                         thisPart.SignalPainting.DownLight.Size = new Size(30, 30);
                         thisPart.SignalPainting.DownLight.BorderColor = Color.White;
                         thisPart.SignalPainting.DownLight.FillColor = Color.Red;
+                        if (thisPart.TypeOfParts == Types.shunttingSignal) thisPart.SignalPainting.DownLight.FillColor = Color.Blue;
                         thisPart.SignalPainting.DownLight.FillStyle = FillStyle.Solid;
                         shapeContainer.Shapes.Add(thisPart.SignalPainting.DownLight);
-                        thisPart.SignalPainting.UpLight.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 60, thisPart.SignalPainting.BaseLine.Y1);
-                        thisPart.SignalPainting.UpLight.Size = new Size(30, 30);
-                        thisPart.SignalPainting.UpLight.BorderColor = Color.White;
-                        thisPart.SignalPainting.UpLight.FillColor = Color.Black;
-                        thisPart.SignalPainting.UpLight.FillStyle = FillStyle.Solid;
-                        shapeContainer.Shapes.Add(thisPart.SignalPainting.UpLight);
+                        if (thisPart.TypeOfParts != Types.shunttingSignal)
+                        {
+                            thisPart.SignalPainting.UpLight.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 60, thisPart.SignalPainting.BaseLine.Y1);
+                            thisPart.SignalPainting.UpLight.Size = new Size(30, 30);
+                            thisPart.SignalPainting.UpLight.BorderColor = Color.White;
+                            thisPart.SignalPainting.UpLight.FillColor = Color.Black;
+                            thisPart.SignalPainting.UpLight.FillStyle = FillStyle.Solid;
+                            shapeContainer.Shapes.Add(thisPart.SignalPainting.UpLight);
+                        }
+                        if (thisPart.TypeOfParts == Types.trainSignal)
+                        {
+                            thisPart.SignalPainting.TrainButton.Location = new Point(thisPart.SignalPainting.BaseLine.X1 + 10, thisPart.SignalPainting.BaseLine.Y1);
+                            thisPart.SignalPainting.TrainButton.Size = new Size(30, 30);
+                            thisPart.SignalPainting.TrainButton.BorderColor = Color.White;
+                            thisPart.SignalPainting.TrainButton.FillColor = Color.Green;
+                            thisPart.SignalPainting.TrainButton.FillStyle = FillStyle.Solid;
+                            shapeContainer.Shapes.Add(thisPart.SignalPainting.TrainButton);
+                        }
+                        if (thisPart.TypeOfParts >= Types.shunttingSignal)
+                        {
+                            thisPart.SignalPainting.ShuntingButton.Location = new Point(thisPart.SignalPainting.BaseLine.X1 + 10, thisPart.SignalPainting.BaseLine.Y1);
+                            thisPart.SignalPainting.ShuntingButton.Size = new Size(30, 30);
+                            thisPart.SignalPainting.ShuntingButton.BorderColor = Color.White;
+                            thisPart.SignalPainting.ShuntingButton.FillColor = Color.White;
+                            thisPart.SignalPainting.ShuntingButton.FillStyle = FillStyle.Solid;
+                            shapeContainer.Shapes.Add(thisPart.SignalPainting.ShuntingButton);
+                        }
+                        if (thisPart.TypeOfParts == Types.multifunctionSignal)
+                        {
+                            thisPart.SignalPainting.TrainButton.Location = new Point(thisPart.SignalPainting.BaseLine.X1 + 50, thisPart.SignalPainting.BaseLine.Y1);
+                            thisPart.SignalPainting.TrainButton.Size = new Size(30, 30);
+                            thisPart.SignalPainting.TrainButton.BorderColor = Color.White;
+                            thisPart.SignalPainting.TrainButton.FillColor = Color.Green;
+                            thisPart.SignalPainting.TrainButton.FillStyle = FillStyle.Solid;
+                            shapeContainer.Shapes.Add(thisPart.SignalPainting.TrainButton);
+                        }
+
                     }
                     else if (thisPart.Left != null)
                     {
@@ -304,14 +337,45 @@ namespace RailwayCI
                         thisPart.SignalPainting.DownLight.Size = new Size(30, 30);
                         thisPart.SignalPainting.DownLight.BorderColor = Color.White;
                         thisPart.SignalPainting.DownLight.FillColor = Color.Red;
+                        if (thisPart.TypeOfParts == Types.shunttingSignal) thisPart.SignalPainting.DownLight.FillColor = Color.Blue;
                         thisPart.SignalPainting.DownLight.FillStyle = FillStyle.Solid;
                         shapeContainer.Shapes.Add(thisPart.SignalPainting.DownLight);
-                        thisPart.SignalPainting.UpLight.Location = new Point(thisPart.SignalPainting.BaseLine.X1 + 30, thisPart.SignalPainting.BaseLine.Y1);
-                        thisPart.SignalPainting.UpLight.Size = new Size(30, 30);
-                        thisPart.SignalPainting.UpLight.BorderColor = Color.White;
-                        thisPart.SignalPainting.UpLight.FillColor = Color.Black;
-                        thisPart.SignalPainting.UpLight.FillStyle = FillStyle.Solid;
-                        shapeContainer.Shapes.Add(thisPart.SignalPainting.UpLight);
+                        if (thisPart.TypeOfParts != Types.shunttingSignal)
+                        {
+                            thisPart.SignalPainting.UpLight.Location = new Point(thisPart.SignalPainting.BaseLine.X1 + 30, thisPart.SignalPainting.BaseLine.Y1);
+                            thisPart.SignalPainting.UpLight.Size = new Size(30, 30);
+                            thisPart.SignalPainting.UpLight.BorderColor = Color.White;
+                            thisPart.SignalPainting.UpLight.FillColor = Color.Black;
+                            thisPart.SignalPainting.UpLight.FillStyle = FillStyle.Solid;
+                            shapeContainer.Shapes.Add(thisPart.SignalPainting.UpLight);
+                        }
+                        if (thisPart.TypeOfParts == Types.trainSignal)
+                        {
+                            thisPart.SignalPainting.TrainButton.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 40, thisPart.SignalPainting.BaseLine.Y1);
+                            thisPart.SignalPainting.TrainButton.Size = new Size(30, 30);
+                            thisPart.SignalPainting.TrainButton.BorderColor = Color.White;
+                            thisPart.SignalPainting.TrainButton.FillColor = Color.Green;
+                            thisPart.SignalPainting.TrainButton.FillStyle = FillStyle.Solid;
+                            shapeContainer.Shapes.Add(thisPart.SignalPainting.TrainButton);
+                        }
+                        if (thisPart.TypeOfParts >= Types.shunttingSignal)
+                        {
+                            thisPart.SignalPainting.ShuntingButton.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 40, thisPart.SignalPainting.BaseLine.Y1);
+                            thisPart.SignalPainting.ShuntingButton.Size = new Size(30, 30);
+                            thisPart.SignalPainting.ShuntingButton.BorderColor = Color.White;
+                            thisPart.SignalPainting.ShuntingButton.FillColor = Color.White;
+                            thisPart.SignalPainting.ShuntingButton.FillStyle = FillStyle.Solid;
+                            shapeContainer.Shapes.Add(thisPart.SignalPainting.ShuntingButton);
+                        }
+                        if (thisPart.TypeOfParts == Types.multifunctionSignal)
+                        {
+                            thisPart.SignalPainting.TrainButton.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 80, thisPart.SignalPainting.BaseLine.Y1);
+                            thisPart.SignalPainting.TrainButton.Size = new Size(30, 30);
+                            thisPart.SignalPainting.TrainButton.BorderColor = Color.White;
+                            thisPart.SignalPainting.TrainButton.FillColor = Color.Green;
+                            thisPart.SignalPainting.TrainButton.FillStyle = FillStyle.Solid;
+                            shapeContainer.Shapes.Add(thisPart.SignalPainting.TrainButton);
+                        }
                     }
                 }
             }
@@ -510,8 +574,13 @@ namespace RailwayCI
                 {
                     using (StreamReader reader = new StreamReader(openFileDialog.FileName))// 使用 StreamReader 读取文件内容
                     {
-                        StationData = reader.ReadToEnd();
-                        DataTransforming();
+                        string NewData = reader.ReadToEnd();
+                        if (NewData != "")
+                        {
+                            StationData = NewData;
+                            DataTransforming();
+                        }
+                        else MessageBox.Show("站场数据不能为空！");
                     }
                 }
             }
@@ -567,6 +636,14 @@ namespace RailwayCI
                     if (PartsOfStation[i].Rail != null)
                     {
                         PartsOfStation[i].Rail.Parent = null; // 从父控件移除LineShape
+                    }
+                    if (PartsOfStation[i].SignalPainting != null)
+                    {
+                        PartsOfStation[i].SignalPainting.BaseLine.Parent = null;
+                        PartsOfStation[i].SignalPainting.DownLight.Parent = null;
+                        if (PartsOfStation[i].SignalPainting.UpLight != null) PartsOfStation[i].SignalPainting.UpLight.Parent = null;
+                        if (PartsOfStation[i].SignalPainting.TrainButton != null) PartsOfStation[i].SignalPainting.TrainButton.Parent = null;
+                        if (PartsOfStation[i].SignalPainting.ShuntingButton != null) PartsOfStation[i].SignalPainting.ShuntingButton.Parent = null;
                     }
                     if (PartsOfStation[i].NameLabel != null)
                     {

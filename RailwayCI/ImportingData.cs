@@ -24,8 +24,12 @@ namespace RailwayCI
         private void button1_Click(object sender, EventArgs e)
         {
             string newData = textBox1.Text;
-            OnimportingData(newData);
-            this.Close();
+            if (newData != "")
+            {
+                OnimportingData(newData);
+                this.Close();
+            }
+            else MessageBox.Show("站场数据不能为空！");
         }
 
         protected virtual void OnimportingData(string newData)
