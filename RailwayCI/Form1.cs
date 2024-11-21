@@ -27,7 +27,7 @@ namespace RailwayCI
             timer.Start(); // 启动计时器  
         }
         public string StationData = "轨道,1G,150,null,1;辙叉,1,上撇,1G,2G,1/3,null;轨道,2G,280,1,null;道岔,1/3,撇形,1,3;辙叉,3,下撇,4G,3G,null,1/3;轨道,3G,150,3,null;轨道,4G,280,null,3;列车信号机,X,下方,2G,R;调车信号机,D1,上方,4G,L;列车调车信号机,D2,上方,3G,R";
-        public string Password = "";
+        public string Password = "000000";//默认口令：六个零
         public bool PasswordFlag = false;
         public int SectionNumber = 0;
         public enum Types { track, turnout, frog, trainSignal, shunttingSignal, multifunctionSignal };
@@ -49,6 +49,7 @@ namespace RailwayCI
             public string Directions;
             public int Conditions;
             public Boolean Painted = false;
+            public Boolean Changeable = false;
             public OccupancyStates OccupancyState;
             public RoutePoints RoutePoint;
             public LineShape Rail;
@@ -72,7 +73,7 @@ namespace RailwayCI
             set
             {
                 label1.Text = value;
-                this.Text = "计算机联锁控显端仿真 —— " + value + " 站";
+                this.Text = "计算机联锁控显端仿真 —— " + value + "站";
             }
         }
         private void Timer_Tick(object sender, EventArgs e)
@@ -83,15 +84,25 @@ namespace RailwayCI
         {
             this.StationName = newName;
             NewTitleLocation();
+            dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "设置新站场名为：" + StationName);
         }
         private void HandleimportingData(string newData)
         {
             this.StationData = newData;
             DataTransforming();
+            dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "导入新站场数据");
         }
         private void HandlePassword(string newPassword)
         {
             this.Password = newPassword;
+            if (this.Password == "")
+            {
+            var PasswordForm = new Password();
+            PasswordForm.Text = "设置保护口令";
+            PasswordForm.PasswordChanged += HandlePassword;
+            PasswordForm.ShowDialog();
+            }
+
         }
         private void HandlePasswordFlag(bool newFlag)
         {
@@ -302,6 +313,7 @@ namespace RailwayCI
                             thisPart.SignalPainting.TrainButton.BorderColor = Color.White;
                             thisPart.SignalPainting.TrainButton.FillColor = Color.Green;
                             thisPart.SignalPainting.TrainButton.FillStyle = FillStyle.Solid;
+                            thisPart.SignalPainting.TrainButton.Click += TrainButtonClicked;
                             shapeContainer.Shapes.Add(thisPart.SignalPainting.TrainButton);
                         }
                         if (thisPart.TypeOfParts >= Types.shunttingSignal)
@@ -311,6 +323,7 @@ namespace RailwayCI
                             thisPart.SignalPainting.ShuntingButton.BorderColor = Color.White;
                             thisPart.SignalPainting.ShuntingButton.FillColor = Color.White;
                             thisPart.SignalPainting.ShuntingButton.FillStyle = FillStyle.Solid;
+                            thisPart.SignalPainting.ShuntingButton.Click += ShuntingButtonClicked;
                             shapeContainer.Shapes.Add(thisPart.SignalPainting.ShuntingButton);
                         }
                         if (thisPart.TypeOfParts == Types.multifunctionSignal)
@@ -320,6 +333,7 @@ namespace RailwayCI
                             thisPart.SignalPainting.TrainButton.BorderColor = Color.White;
                             thisPart.SignalPainting.TrainButton.FillColor = Color.Green;
                             thisPart.SignalPainting.TrainButton.FillStyle = FillStyle.Solid;
+                            thisPart.SignalPainting.TrainButton.Click += TrainButtonClicked;
                             shapeContainer.Shapes.Add(thisPart.SignalPainting.TrainButton);
                         }
 
@@ -356,6 +370,7 @@ namespace RailwayCI
                             thisPart.SignalPainting.TrainButton.BorderColor = Color.White;
                             thisPart.SignalPainting.TrainButton.FillColor = Color.Green;
                             thisPart.SignalPainting.TrainButton.FillStyle = FillStyle.Solid;
+                            thisPart.SignalPainting.TrainButton.Click += TrainButtonClicked;
                             shapeContainer.Shapes.Add(thisPart.SignalPainting.TrainButton);
                         }
                         if (thisPart.TypeOfParts >= Types.shunttingSignal)
@@ -365,6 +380,7 @@ namespace RailwayCI
                             thisPart.SignalPainting.ShuntingButton.BorderColor = Color.White;
                             thisPart.SignalPainting.ShuntingButton.FillColor = Color.White;
                             thisPart.SignalPainting.ShuntingButton.FillStyle = FillStyle.Solid;
+                            thisPart.SignalPainting.ShuntingButton.Click += ShuntingButtonClicked;
                             shapeContainer.Shapes.Add(thisPart.SignalPainting.ShuntingButton);
                         }
                         if (thisPart.TypeOfParts == Types.multifunctionSignal)
@@ -374,6 +390,7 @@ namespace RailwayCI
                             thisPart.SignalPainting.TrainButton.BorderColor = Color.White;
                             thisPart.SignalPainting.TrainButton.FillColor = Color.Green;
                             thisPart.SignalPainting.TrainButton.FillStyle = FillStyle.Solid;
+                            thisPart.SignalPainting.TrainButton.Click += TrainButtonClicked;
                             shapeContainer.Shapes.Add(thisPart.SignalPainting.TrainButton);
                         }
                     }
@@ -425,6 +442,7 @@ namespace RailwayCI
                     }
                 else
                 {
+                    thisPart.Changeable = true;
                     thisPart.Rail.X1 = Xpoint;
                     thisPart.Rail.Y1 = Ypoint;
                     thisPart.Rail.X2 = Xpoint + thisPart.Length;
@@ -488,7 +506,7 @@ namespace RailwayCI
                 shapeContainer.Shapes.Add(thisPart.Rail);
             }
 
-            if (thisPart.TypeOfParts == Types.track || thisPart.TypeOfParts == Types.frog)
+            if (thisPart.TypeOfParts == Types.track || (thisPart.TypeOfParts == Types.frog && thisPart.Changeable))
             {
                 thisPart.NameLabel = new Label
                 {
@@ -660,6 +678,7 @@ namespace RailwayCI
                 }
             }
             SectionNumber = 0;
+            dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "重置站场数据");
         }
 
         private void 站场图片ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -704,17 +723,85 @@ namespace RailwayCI
             var nameChangeForm = new NameChange();
             nameChangeForm.NameChanged += HandleNameChanged;
             nameChangeForm.ShowDialog(this);
+            this.WindowState = FormWindowState.Maximized;
+            NewTitleLocation();
+            NewButtonLocation();
+            NewListLocation();
         }
 
         private void Form1_SizeChanged(object sender, EventArgs e)
         {
             NewTitleLocation();
+            NewButtonLocation();
+            NewListLocation();
         }
 
         private void NewTitleLocation()
         {
             label1.Location = new Point(this.Width / 2 - label1.Size.Width - 80, label1.Location.Y);
             label2.Location = new Point(this.Width / 2 + 50, label2.Location.Y);
+        }
+
+        private void NewButtonLocation()
+        {
+            MessageButton.Location = new Point(this.Width - 30 - MessageButton.Width, this.Height - 55 - MessageButton.Height);
+        }
+        private void NewListLocation()
+        {
+            dataGridView1.Location = new Point(MessageButton.Location.X + MessageButton.Width - dataGridView1.Width, MessageButton.Location.Y - dataGridView1.Height);
+        }
+
+        private void MessageButton_Click(object sender, EventArgs e)//右下角消息提示框按钮点击方法
+        {
+            if (dataGridView1.Visible)
+                dataGridView1.Visible = false;
+            else dataGridView1.Visible = true;
+        }
+
+        private void TrainButtonClicked(object sender, EventArgs e)//列车进路开放按钮触发的事件
+        {
+            RectangleShape ClickedButton = (RectangleShape)sender;
+            for (int i = 0; i < SectionNumber; i++)
+            {
+                if (PartsOfStation[i].SignalPainting != null && PartsOfStation[i].SignalPainting.TrainButton == ClickedButton)
+                {
+                    MessageBox.Show(PartsOfStation[i].NameOfParts);//测试用提示消息，请忽略
+                    break;
+                }
+            }
+        }
+
+        private void ShuntingButtonClicked(object sender, EventArgs e)//调车进路开放按钮触发的事件
+        {
+            RectangleShape ClickedButton = (RectangleShape)sender;
+            for (int i = 0; i < SectionNumber; i++)
+            {
+                if (PartsOfStation[i].SignalPainting != null && PartsOfStation[i].SignalPainting.ShuntingButton == ClickedButton)
+                {
+                    MessageBox.Show(PartsOfStation[i].NameOfParts);//测试用提示消息，请忽略
+                    break;
+                }
+            }
+        }
+
+        private void 总定位ButtonClicked()//道岔总定位触发的事件
+        {
+
+        }
+
+        private void 总反位ButtonClicked()//道岔总反位触发的事件
+        {
+
+        }
+
+        private void 单锁ButtonClicked()//道岔单锁触发的事件
+        {
+
+        }
+
+        private void 单解ButtonClicked()//道岔单解触发的事件
+        {
+
         }
     }
 }
