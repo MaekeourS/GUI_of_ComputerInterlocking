@@ -26,15 +26,18 @@ namespace RailwayCI
             timer.Tick += Timer_Tick; // 绑定Tick事件处理器  
             timer.Start(); // 启动计时器  
         }
-        public string StationData = "轨道,1G,150,null,1;辙叉,1,上撇,1G,2G,1/3,null;轨道,2G,280,1,null;道岔,1/3,撇形,1,3;辙叉,3,下撇,4G,3G,null,1/3;轨道,3G,150,3,null;轨道,4G,280,null,3;列车信号机,X,下方,2G,R;调车信号机,D1,上方,4G,L;列车调车信号机,D2,上方,3G,R";
+        public string StationData = "轨道,1DG,50,null,1G;轨道,1G,150,1DG,1;辙叉,1,上撇,1G,2G,1/3,null;轨道,2G,280,1,7G;轨道,7G,50,2G,null;道岔,1/3,撇形,1,3;辙叉,3,下撇,4G,3G,null,1/3;轨道,3G,150,3,6G;轨道,4G,280,5G,3;轨道,5G,50,null,4G;轨道,6G,50,3G,null;列车信号机,X,上方,1G,L;列车信号机,S,上方,4G,L;列车调车信号机,D2,上方,3G,R;列车调车信号机,D1,上方,2G,R";
         public string Password = "000000";//默认口令：六个零
         public bool PasswordFlag = false;
         public int SectionNumber = 0;
+        public int RailNumber = 0;
         public enum Types { track, turnout, frog, trainSignal, shunttingSignal, multifunctionSignal };
         public enum OccupancyStates { available, occupied, breakdown };
-        public enum RoutePoints { starting, turning, ending };
+        public enum RoutePoints { Other, starting, turning, ending };
         public class PartsOfStations
         {
+            public int Number;
+            public int LineNumber;
             public PartsOfStations Up;
             public PartsOfStations Down;
             public PartsOfStations Left;
@@ -48,8 +51,8 @@ namespace RailwayCI
             public int Length;
             public string Directions;
             public int Conditions;
-            public Boolean Painted = false;
-            public Boolean Changeable = false;
+            public bool Painted = false;
+            public bool Changeable = false;
             public OccupancyStates OccupancyState;
             public RoutePoints RoutePoint;
             public LineShape Rail;
@@ -97,10 +100,10 @@ namespace RailwayCI
             this.Password = newPassword;
             if (this.Password == "")
             {
-            var PasswordForm = new Password();
-            PasswordForm.Text = "设置保护口令";
-            PasswordForm.PasswordChanged += HandlePassword;
-            PasswordForm.ShowDialog();
+                var PasswordForm = new Password();
+                PasswordForm.Text = "设置保护口令";
+                PasswordForm.PasswordChanged += HandlePassword;
+                PasswordForm.ShowDialog();
             }
 
         }
@@ -118,7 +121,7 @@ namespace RailwayCI
         {
 
             string[] EachDatas = StationData.Split(';');
-            int i = 0;
+            int i = 0, j = 0;
             foreach (string EachData in EachDatas)
             {
                 string[] Details = EachData.Split(',');
@@ -139,6 +142,7 @@ namespace RailwayCI
                     case "列车调车信号机":
                         PartsOfStation[i].TypeOfParts = Types.multifunctionSignal; typeFlag = 5; break;
                 }
+                PartsOfStation[i].Number = i;
                 PartsOfStation[i].NameOfParts = Details[1];
                 switch (typeFlag)
                 {
@@ -146,12 +150,14 @@ namespace RailwayCI
                         PartsOfStation[i].Length = int.Parse(Details[2]);
                         PartsOfStation[i].LeftName = Details[3] == "null" ? "" : Details[3];
                         PartsOfStation[i].RightName = Details[4] == "null" ? "" : Details[4];
+                        j++;
                         break;
                     case 1:
                         PartsOfStation[i].Length = 100;
                         PartsOfStation[i].Directions = Details[2];
                         PartsOfStation[i].UpName = Details[3] == "null" ? "" : Details[3];
                         PartsOfStation[i].DownName = Details[4] == "null" ? "" : Details[4];
+                        j++;
                         break;
                     case 2:
                         PartsOfStation[i].Length = 30;
@@ -160,6 +166,7 @@ namespace RailwayCI
                         PartsOfStation[i].RightName = Details[4] == "null" ? "" : Details[4];
                         PartsOfStation[i].UpName = Details[5] == "null" ? "" : Details[5];
                         PartsOfStation[i].DownName = Details[6] == "null" ? "" : Details[6];
+                        j++;
                         break;
                     case 3:
                     case 4:
@@ -182,11 +189,13 @@ namespace RailwayCI
                 i++;
             }
             SectionNumber = i;
+            RailNumber = j;
             DataConnecting();
             PartPainting();
         }
         public void DataConnecting()//建立部件间引用
         {
+            PartsOfStation[0].LineNumber = 5;
             for (int i = 0; i < SectionNumber; i++)
             {
                 if (PartsOfStation[i].TypeOfParts <= Types.frog)
@@ -252,10 +261,47 @@ namespace RailwayCI
                                 break;
                             }
                     }
+                }
 
 
+            }
+            PartsOfStations thisPart = PartsOfStation[0];
+            int LineNumberAdded = 1;
+            //MessageBox.Show(RailNumber.ToString());
+            while (LineNumberAdded < RailNumber)
+            {
+                for (int l = 0; l < SectionNumber; l++)
+                {
+                    if (PartsOfStation[l].LineNumber == 0 && PartsOfStation[l].TypeOfParts <= Types.frog)
+                    {
+                        if (PartsOfStation[l].Right != null && PartsOfStation[l].Right.LineNumber != 0)
+                        {
+                            PartsOfStation[l].LineNumber = PartsOfStation[l].Right.LineNumber;
+                            LineNumberAdded++;
+                            //MessageBox.Show(LineNumberAdded.ToString());
+                        }
+                        if (PartsOfStation[l].Left != null && PartsOfStation[l].Left.LineNumber != 0)
+                        {
+                            PartsOfStation[l].LineNumber = PartsOfStation[l].Left.LineNumber;
+                            LineNumberAdded++;
+                            //MessageBox.Show(LineNumberAdded.ToString());
+                        }
+                        if (PartsOfStation[l].Up != null && PartsOfStation[l].Up.LineNumber != 0)
+                        {
+                            PartsOfStation[l].LineNumber = PartsOfStation[l].Up.LineNumber + 1;
+                            LineNumberAdded++;
+                            //MessageBox.Show(LineNumberAdded.ToString());
+                        }
+                        if (PartsOfStation[l].Down != null && PartsOfStation[l].Down.LineNumber != 0)
+                        {
+                            PartsOfStation[l].LineNumber = PartsOfStation[l].Down.LineNumber - 1;
+                            LineNumberAdded++;
+                            //MessageBox.Show(LineNumberAdded.ToString());
+                        }
+                    }
                 }
             }
+
         }
         public void PartPainting()//绘图
         {
@@ -761,14 +807,34 @@ namespace RailwayCI
         private void TrainButtonClicked(object sender, EventArgs e)//列车进路开放按钮触发的事件
         {
             RectangleShape ClickedButton = (RectangleShape)sender;
-            for (int i = 0; i < SectionNumber; i++)
+            int i, j;
+            for (i = 0; i < SectionNumber; i++)
             {
                 if (PartsOfStation[i].SignalPainting != null && PartsOfStation[i].SignalPainting.TrainButton == ClickedButton)
                 {
-                    MessageBox.Show(PartsOfStation[i].NameOfParts);//测试用提示消息，请忽略
+                    //MessageBox.Show(PartsOfStation[i].NameOfParts);//测试用提示消息，请忽略
                     break;
                 }
             }
+            for (j = 0; j < SectionNumber; j++)
+            {
+                if (PartsOfStation[j].RoutePoint == RoutePoints.starting && PartsOfStation[i].SignalPainting.TrainButton != null) break;
+            }
+            if (j < SectionNumber)
+            {
+                if ((PartsOfStation[j].Right != null && PartsOfStation[i].Right != null) || (PartsOfStation[j].Left != null && PartsOfStation[i].Left != null))
+                {
+                    PartsOfStation[i].RoutePoint = RoutePoints.turning;
+                    RouteCreating(j, i, false);
+                }
+                else
+                {
+                    PartsOfStation[i].RoutePoint = RoutePoints.ending;
+                    RouteCreating(j, i, true);
+                }
+
+            }
+            else PartsOfStation[i].RoutePoint = RoutePoints.starting;
         }
 
         private void ShuntingButtonClicked(object sender, EventArgs e)//调车进路开放按钮触发的事件
@@ -778,7 +844,7 @@ namespace RailwayCI
             {
                 if (PartsOfStation[i].SignalPainting != null && PartsOfStation[i].SignalPainting.ShuntingButton == ClickedButton)
                 {
-                    MessageBox.Show(PartsOfStation[i].NameOfParts);//测试用提示消息，请忽略
+                    //MessageBox.Show(PartsOfStation[i].NameOfParts);//测试用提示消息，请忽略
                     break;
                 }
             }
@@ -802,6 +868,73 @@ namespace RailwayCI
         private void 单解ButtonClicked()//道岔单解触发的事件
         {
 
+        }
+
+        private void RouteCreating(int StartPoint, int EndPoint, bool Ended)//路线生成
+        {
+            int i = PartsOfStation[StartPoint].Left != null ? PartsOfStation[StartPoint].Left.Number : PartsOfStation[StartPoint].Right.Number;
+            EndPoint = PartsOfStation[EndPoint].Left != null ? PartsOfStation[EndPoint].Left.Number : PartsOfStation[EndPoint].Right.Number;
+            while (PartsOfStation[i].Left != null || PartsOfStation[i].TypeOfParts != Types.track)
+            {
+                //MessageBox.Show(PartsOfStation[i].LineNumber.ToString());
+                if (i == EndPoint)
+                {
+                    MessageBox.Show("found");
+                    return;
+                }
+                if (PartsOfStation[EndPoint].LineNumber < PartsOfStation[i].LineNumber && PartsOfStation[i].Up != null)
+                {
+                    if (PartsOfStation[i].Up.Directions != "撇形")
+                        i = PartsOfStation[i].Up.Number;
+                    else i = PartsOfStation[i].Left.Number;
+                }
+                else if (PartsOfStation[EndPoint].LineNumber > PartsOfStation[i].LineNumber && PartsOfStation[i].Down != null)
+                {
+                    if (PartsOfStation[i].Down.Directions != "捺形")
+                        i = PartsOfStation[i].Down.Number;
+                    i = PartsOfStation[i].Left.Number;
+                }
+                else
+                {
+                    i = PartsOfStation[i].Left.Number;
+                    //MessageBox.Show("founding");
+                }
+
+            }
+            i = PartsOfStation[StartPoint].Left != null ? PartsOfStation[StartPoint].Left.Number : PartsOfStation[StartPoint].Right.Number;
+            MessageBox.Show(PartsOfStation[EndPoint].LineNumber.ToString());
+
+            while (PartsOfStation[i].Right != null || PartsOfStation[i].TypeOfParts != Types.track)
+            {
+                //MessageBox.Show(PartsOfStation[i].LineNumber.ToString());
+                if (i == EndPoint)
+                {
+                    MessageBox.Show("found");
+                    return;
+                }
+                if (PartsOfStation[EndPoint].LineNumber < PartsOfStation[i].LineNumber && PartsOfStation[i].Up != null)
+                {
+                    if (PartsOfStation[i].Up.Directions != "捺形")
+                        i = PartsOfStation[i].Up.Number;
+                    else i = PartsOfStation[i].Right.Number;
+                    //MessageBox.Show("up");
+                }
+                else if (PartsOfStation[EndPoint].LineNumber > PartsOfStation[i].LineNumber && PartsOfStation[i].Down != null)
+                {
+                    if (PartsOfStation[i].Down.Directions != "撇形")
+                        i = PartsOfStation[i].Down.Number;
+                    else i = PartsOfStation[i].Right.Number;
+                    //MessageBox.Show("down");
+                }
+                else
+                {
+                    i = PartsOfStation[i].Right.Number;
+                    MessageBox.Show("founding");
+                }
+
+            }
+            MessageBox.Show("NOTfound");
+            return;
         }
     }
 }
