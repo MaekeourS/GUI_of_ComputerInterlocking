@@ -600,15 +600,28 @@ namespace RailwayCI
                     Otherlabel.BackColor = Color.White;
                 }
             }
-            PasswordFlag = false;
-            var PasswordForm = new Password();
-            PasswordForm.Text = "验证保护口令";
-            PasswordForm.OldPassword = Password;
-            PasswordForm.SettingNewPassword = false;
-            PasswordForm.FlagChecked += HandlePasswordFlag;
-            PasswordForm.ShowDialog();
-            if (!PasswordFlag) return; else ClickedStatusLabel.BackColor = SystemColors.GradientActiveCaption;
-        }
+                        if (i == 7 || i == 8)
+            {
+                // 进行密码验证
+                PasswordFlag = false;
+                var PasswordForm = new Password();
+                PasswordForm.Text = "验证保护口令";
+                PasswordForm.OldPassword = Password;  // 假设 Password 是已定义的字段或属性
+                PasswordForm.SettingNewPassword = false;
+                PasswordForm.FlagChecked += HandlePasswordFlag;  // 处理验证结果的事件处理器
+                PasswordForm.ShowDialog();
+
+                // 如果密码验证失败，则返回
+                if (!PasswordFlag)
+                    return;
+
+                // 密码验证成功，设置当前点击标签的背景色
+                ClickedStatusLabel.BackColor = SystemColors.GradientActiveCaption;
+            }
+            else
+            {
+                ClickedStatusLabel.BackColor = SystemColors.GradientActiveCaption;
+            }
 
         private void 直接输入ToolStripMenuItem_Click(object sender, EventArgs e)
         {
