@@ -31,7 +31,7 @@ namespace RailwayCI
         private void button_Click(object sender, EventArgs e)
         {
             Button clickedbutton = (Button)sender;
-            if(textBox1.Text.Length < 6)
+            if (textBox1.Text.Length < 6)
                 textBox1.Text += clickedbutton.Name.Substring(6);
         }
 
@@ -60,17 +60,26 @@ namespace RailwayCI
             string newPassword = textBox1.Text;
             if (this.Text == "设置保护口令")
             {
-                OnPasswordChanged(newPassword);
-                this.Close();
+                if (newPassword.Length == 6)
+                {
+                    OnPasswordChanged(newPassword);
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("口令长度不足，请重新输入！");
+                    textBox1.Clear();
+                }
+
             }
             else if (this.Text == "验证保护口令" && newPassword == OldPassword)
             {
                 bool newFlag = true;
-                if(SettingNewPassword)
+                if (SettingNewPassword)
                     OnPasswordChanged("");
                 else OnFlagChecked(newFlag);
                 this.Close();
-                
+
             }
             else
             {
