@@ -63,6 +63,7 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Incident = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DelayLabel = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -388,6 +389,7 @@
             this.Time.HeaderText = "时间";
             this.Time.MinimumWidth = 8;
             this.Time.Name = "Time";
+            this.Time.Width = 150;
             // 
             // Incident
             // 
@@ -398,12 +400,24 @@
             this.Incident.Name = "Incident";
             this.Incident.Width = 300;
             // 
+            // DelayLabel
+            // 
+            this.DelayLabel.BackColor = System.Drawing.SystemColors.Window;
+            this.DelayLabel.ForeColor = System.Drawing.Color.Black;
+            this.DelayLabel.Location = new System.Drawing.Point(169, 75);
+            this.DelayLabel.Name = "DelayLabel";
+            this.DelayLabel.Size = new System.Drawing.Size(148, 37);
+            this.DelayLabel.TabIndex = 6;
+            this.DelayLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.DelayLabel.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.WindowText;
             this.ClientSize = new System.Drawing.Size(1446, 852);
+            this.Controls.Add(this.DelayLabel);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.MessageButton);
             this.Controls.Add(this.label2);
@@ -460,6 +474,7 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Time;
         private System.Windows.Forms.DataGridViewTextBoxColumn Incident;
+        private System.Windows.Forms.Label DelayLabel;
     }
 }
 
