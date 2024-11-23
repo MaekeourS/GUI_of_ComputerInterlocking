@@ -29,7 +29,7 @@ namespace RailwayCI
             DelayTimer.Interval = 1000;
             DelayTimer.Tick += DelayTimer_Tick;
         }
-        public string StationData = "轨道,1DG,50,null,1G;轨道,1G,150,1DG,1;辙叉,1,上撇,1G,2G,1/3,null;轨道,2G,280,1,7G;轨道,7G,50,2G,null;道岔,1/3,撇形,1,3;辙叉,3,下撇,4G,3G,null,1/3;轨道,3G,150,3,6G;轨道,4G,280,5G,3;轨道,5G,50,null,4G;轨道,6G,50,3G,null;列车调车信号机,X,上方,1G,L;列车信号机,S,上方,4G,L;列车调车信号机,D1,上方,3G,R;调车信号机,D1,上方,2G,R";
+        public string StationData = "轨道,1DG,50,null,1G;轨道,1G,150,1DG,1;辙叉,1,上撇,1G,2G,1/3,null;轨道,2G,280,1,7G;轨道,7G,50,2G,null;道岔,1/3,撇形,1,3;辙叉,3,下撇,4G,3G,null,1/3;轨道,3G,150,3,6G;轨道,4G,280,5G,3;轨道,5G,50,null,4G;轨道,6G,50,3G,null;列车调车信号机,X,上方,1G,L;列车信号机,S,上方,4G,L;列车调车信号机,D1,上方,3G,R;调车信号机,D2,上方,2G,R";
         public string Password = "000000";//默认口令：六个零
         public bool PasswordFlag = false;
         public int TurningFlag = -1;
@@ -64,6 +64,7 @@ namespace RailwayCI
             public OccupancyStates OccupancyState;
             public RoutePoints RoutePoint;
             public LineShape Rail;
+            public LineShape InsulatedJoint;
             public OvalShape LockSign;
             public SignalPaintings SignalPainting;
             public Label NameLabel;
@@ -103,8 +104,17 @@ namespace RailwayCI
                 CancelPart = -1;
                 DelayLabel.Text = "";
                 DelayLabel.Visible = false;
-                toolStripStatusLabel7.BackColor = Color.White;
-                toolStripStatusLabel8.BackColor = Color.White;
+                if (toolStripStatusLabel7.BackColor == SystemColors.GradientActiveCaption)
+                {
+                    toolStripStatusLabel7.BackColor = Color.White;
+                    dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "总取消");
+                }
+                else if (toolStripStatusLabel8.BackColor == SystemColors.GradientActiveCaption)
+                {
+                    toolStripStatusLabel8.BackColor = Color.White;
+                    dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "总人解");
+                }
+
                 return;
             }
 
@@ -344,7 +354,7 @@ namespace RailwayCI
             for (int i = 0; i < SectionNumber; i++)
             {
                 PartsOfStations thisPart = PartsOfStation[i];
-                int Height = thisPart.Directions == "上方" ? -45 : 20;
+                int Height = thisPart.Directions == "上方" ? -50 : 20;
                 if (thisPart.TypeOfParts >= Types.trainSignal)
                 {
                     thisPart.SignalPainting = new SignalPaintings();
@@ -466,6 +476,18 @@ namespace RailwayCI
                             shapeContainer.Shapes.Add(thisPart.SignalPainting.TrainButton);
                         }
                     }
+                    thisPart.NameLabel = new Label
+                    {
+                        Font = new Font("Microsoft YaHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(134))),
+                        Size = new Size(100, 25),
+                        Text = thisPart.NameOfParts,
+                        TextAlign = ContentAlignment.MiddleCenter,
+                        ForeColor = Color.White
+                    };
+                    if (thisPart.Directions == "上方")
+                        thisPart.NameLabel.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 50, thisPart.SignalPainting.BaseLine.Y1 - 40);
+                    else thisPart.NameLabel.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 50, thisPart.SignalPainting.BaseLine.Y1 + 70);
+                    this.Controls.Add(thisPart.NameLabel);
                 }
             }
         }
@@ -473,11 +495,26 @@ namespace RailwayCI
         {
             if (thisPart.TypeOfParts == Types.track)
             {
-                thisPart.Rail = new LineShape();
-                thisPart.Rail.X1 = Xpoint;
-                thisPart.Rail.Y1 = Ypoint;
-                thisPart.Rail.X2 = Xpoint + thisPart.Length;
-                thisPart.Rail.Y2 = Ypoint;
+                thisPart.Rail = new LineShape
+                {
+                    X1 = Xpoint,
+                    Y1 = Ypoint,
+                    X2 = Xpoint + thisPart.Length,
+                    Y2 = Ypoint
+                };
+                if (thisPart.Right != null && thisPart.Right.TypeOfParts == Types.track)
+                {
+                    thisPart.InsulatedJoint = new LineShape
+                    {
+                        X1 = thisPart.Rail.X2,
+                        Y1 = thisPart.Rail.Y2 - 10,
+                        X2 = thisPart.Rail.X2,
+                        Y2 = thisPart.Rail.Y2 + 10,
+                        BorderColor = Color.White,
+                        BorderWidth = 2
+                    };
+                    shapeContainer.Shapes.Add(thisPart.InsulatedJoint);
+                }
             }
             else if (thisPart.TypeOfParts == Types.frog)
             {
@@ -576,12 +613,42 @@ namespace RailwayCI
                         thisPart.Rail.Y2 = Ypoint + thisPart.Length;
                     }
                 }
+                if (thisPart.Directions == "撇形")
+                {
+                    thisPart.InsulatedJoint = new LineShape
+                    {
+                        X1 = (thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - 10,
+                        Y1 = (thisPart.Rail.Y1 + thisPart.Rail.Y2) / 2 - 10,
+                        X2 = (thisPart.Rail.X1 + thisPart.Rail.X2) / 2 + 10,
+                        Y2 = (thisPart.Rail.Y1 + thisPart.Rail.Y2) / 2 + 10,
+                        BorderColor = Color.White,
+                        BorderWidth = 2
+                    };
+                    shapeContainer.Shapes.Add(thisPart.InsulatedJoint);
+                }
+                else
+                {
+                    thisPart.InsulatedJoint = new LineShape
+                    {
+                        X1 = (thisPart.Rail.X1 + thisPart.Rail.X2) / 2 + 10,
+                        Y1 = (thisPart.Rail.Y1 + thisPart.Rail.Y2) / 2 - 10,
+                        X2 = (thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - 10,
+                        Y2 = (thisPart.Rail.Y1 + thisPart.Rail.Y2) / 2 + 10,
+                        BorderColor = Color.White,
+                        BorderWidth = 2
+                    };
+                    shapeContainer.Shapes.Add(thisPart.InsulatedJoint);
+                }
             }
 
             if (thisPart.Rail != null)
             {
                 thisPart.Rail.BorderWidth = 10;
-                thisPart.Rail.BorderColor = Color.FromArgb(85, 120, 182);
+                if (thisPart.TypeOfParts != Types.frog)
+                    thisPart.Rail.BorderColor = Color.FromArgb(85, 120, 182);
+                else if (!thisPart.Changeable)
+                    thisPart.Rail.BorderColor = Color.FromArgb(85, 120, 182);
+                else thisPart.Rail.BorderColor = Color.FromArgb(0, 255, 0);
                 thisPart.Rail.Click += RailClicked;
                 shapeContainer.Shapes.Add(thisPart.Rail);
             }
@@ -601,17 +668,6 @@ namespace RailwayCI
                     thisPart.NameLabel.Location = new Point((thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - 60, thisPart.Rail.Y2 - 40);
                 this.Controls.Add(thisPart.NameLabel);
             }
-
-            /*
-            this.toolStripStatusLabel1.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(60, 23);
-            this.toolStripStatusLabel1.Text = " 总定位 ";
-            */
-            /*
-            各部件绘图，待补全
-            */
-
             thisPart.Painted = true;
             if (thisPart.Right != null && !thisPart.Right.Painted) EachPartPainting(thisPart.Right, Xpoint + thisPart.Length, Ypoint, shapeContainer, false);
             if (thisPart.Up != null && !thisPart.Up.Painted) EachPartPainting(thisPart.Up, Xpoint, Ypoint - thisPart.Up.Length, shapeContainer, true);
@@ -740,6 +796,10 @@ namespace RailwayCI
                     if (PartsOfStation[i].Rail != null)
                     {
                         PartsOfStation[i].Rail.Parent = null; // 从父控件移除LineShape
+                    }
+                    if (PartsOfStation[i].InsulatedJoint != null)
+                    {
+                        PartsOfStation[i].InsulatedJoint.Parent = null;
                     }
                     if (PartsOfStation[i].SignalPainting != null)
                     {
@@ -906,9 +966,9 @@ namespace RailwayCI
                         if (Found != 0)
                         {
                             RouteDisplay(j, i, Found);
-                            PartsOfStation[j].RoutePoint = RoutePoints.Other;
-                            PartsOfStation[i].RoutePoint = RoutePoints.Other;
                         }
+                        PartsOfStation[j].RoutePoint = RoutePoints.Other;
+                        PartsOfStation[i].RoutePoint = RoutePoints.Other;
                     }
                 }
             }
@@ -977,9 +1037,9 @@ namespace RailwayCI
                         if (Found != 0)
                         {
                             RouteDisplay(j, i, Found);
-                            PartsOfStation[j].RoutePoint = RoutePoints.Other;
-                            PartsOfStation[i].RoutePoint = RoutePoints.Other;
                         }
+                        PartsOfStation[j].RoutePoint = RoutePoints.Other;
+                        PartsOfStation[i].RoutePoint = RoutePoints.Other;
                     }
                 }
             }
@@ -1003,13 +1063,39 @@ namespace RailwayCI
                 if (toolStripStatusLabel1.BackColor != Color.White)//总定位按钮按下
                 {
                     if (PartsOfStation[i].Conditions == 1 && !PartsOfStation[i].Locked && PartsOfStation[i].OccupancyState == OccupancyStates.available)
-                        FrogChange(i);
+                    {
+                        if (PartsOfStation[i].Up != null && PartsOfStation[i].Up.Up.Changeable && !PartsOfStation[i].Up.Up.Locked && PartsOfStation[i].Up.Up.OccupancyState == OccupancyStates.available)
+                        {
+                            FrogChange(i);
+                            FrogChange(PartsOfStation[i].Up.Up.Number);
+                        }
+                        else if (PartsOfStation[i].Up != null && !PartsOfStation[i].Up.Up.Changeable) FrogChange(i);
+                        else if (PartsOfStation[i].Down != null && PartsOfStation[i].Down.Down.Changeable && !PartsOfStation[i].Down.Down.Locked && PartsOfStation[i].Down.Down.OccupancyState == OccupancyStates.available)
+                        {
+                            FrogChange(i);
+                            FrogChange(PartsOfStation[i].Down.Down.Number);
+                        }
+                        else if (PartsOfStation[i].Up != null && !PartsOfStation[i].Down.Down.Changeable) FrogChange(i);
+                    }
                     toolStripStatusLabel1.BackColor = Color.White;
                 }
                 else if (toolStripStatusLabel2.BackColor != Color.White)//总反位按钮按下
                 {
                     if (PartsOfStation[i].Conditions == 0 && !PartsOfStation[i].Locked && PartsOfStation[i].OccupancyState == OccupancyStates.available)
-                        FrogChange(i);
+                    {
+                        if (PartsOfStation[i].Up != null && PartsOfStation[i].Up.Up.Changeable && !PartsOfStation[i].Up.Up.Locked && PartsOfStation[i].Up.Up.OccupancyState == OccupancyStates.available)
+                        {
+                            FrogChange(i);
+                            FrogChange(PartsOfStation[i].Up.Up.Number);
+                        }
+                        else if (PartsOfStation[i].Up != null && !PartsOfStation[i].Up.Up.Changeable) FrogChange(i);
+                        else if (PartsOfStation[i].Down != null && PartsOfStation[i].Down.Down.Changeable && !PartsOfStation[i].Down.Down.Locked && PartsOfStation[i].Down.Down.OccupancyState == OccupancyStates.available)
+                        {
+                            FrogChange(i);
+                            FrogChange(PartsOfStation[i].Down.Down.Number);
+                        }
+                        else if (PartsOfStation[i].Up != null && !PartsOfStation[i].Down.Down.Changeable) FrogChange(i);
+                    }
                     toolStripStatusLabel2.BackColor = Color.White;
                 }
                 else if (toolStripStatusLabel3.BackColor != Color.White)//单锁按钮按下
@@ -1027,6 +1113,25 @@ namespace RailwayCI
                         FrogLock(i);
                         toolStripStatusLabel4.BackColor = Color.White;
                     }
+                }
+                else if (toolStripStatusLabel5.BackColor != Color.White)
+                {
+                    if (PartsOfStation[i].OccupancyState == OccupancyStates.available)
+                    {
+                        PartsOfStation[i].OccupancyState = OccupancyStates.breakdown;
+                        PartsOfStation[i].Rail.BorderColor = Color.Red;
+                        toolStripStatusLabel5.BackColor = Color.White;
+                    }
+                }
+                else if (toolStripStatusLabel6.BackColor != Color.White)
+                {
+                    if (PartsOfStation[i].OccupancyState == OccupancyStates.breakdown)
+                    {
+                        PartsOfStation[i].OccupancyState = OccupancyStates.available;
+                        PartsOfStation[i].Rail.BorderColor = Color.FromArgb(85, 120, 182);
+                        toolStripStatusLabel6.BackColor = Color.White;
+                    }
+
                 }
             }
         }
@@ -1051,7 +1156,7 @@ namespace RailwayCI
                     }
                 }
         }
-        private void FrogLock(int FrogChosed)
+        private void FrogLock(int FrogChosed)//道岔锁闭
         {
             PartsOfStations ThisPart = PartsOfStation[FrogChosed];
             if (!ThisPart.Locked)
@@ -1066,18 +1171,23 @@ namespace RailwayCI
             }
 
         }
-        private void FrogChange(int FrogChosed)
+        private void FrogChange(int FrogChosed)//道岔位置转换
         {
             PartsOfStations ThisPart = PartsOfStation[FrogChosed];
             if (ThisPart.Changeable)
             {
                 int ChangeLength = 30;
-                if (ThisPart.Conditions != 0)
+                if (ThisPart.Conditions != 0)//反位转为定位
                 {
                     ChangeLength = -ChangeLength;
+                    ThisPart.Rail.BorderColor = Color.FromArgb(0, 255, 0);
                     ThisPart.Conditions = 0;
                 }
-                else ThisPart.Conditions = 1;
+                else//定位转为反位
+                {
+                    ThisPart.Rail.BorderColor = Color.FromArgb(255, 255, 0);
+                    ThisPart.Conditions = 1;
+                }
                 if (ThisPart.Directions == "上撇")
                 {
                     ThisPart.Rail.Y2 -= ChangeLength;
@@ -1102,11 +1212,11 @@ namespace RailwayCI
             EndPoint = PartsOfStation[EndPoint].Left != null ? PartsOfStation[EndPoint].Left.Number : PartsOfStation[EndPoint].Right.Number;
             while (PartsOfStation[i].Left != null || PartsOfStation[i].TypeOfParts != Types.track)
             {
+                if (PartsOfStation[i].OccupancyState != OccupancyStates.available) return 0;
                 if (i == EndPoint)
                 {
                     return -1;
                 }
-                if (PartsOfStation[i].OccupancyState != OccupancyStates.available) return 0;
                 if (PartsOfStation[EndPoint].LineNumber < PartsOfStation[i].LineNumber && PartsOfStation[i].Up != null)
                 {
                     if (PartsOfStation[i].TypeOfParts == Types.turnout && PartsOfStation[i].Up.Conditions == 0 && PartsOfStation[i].Up.Locked)
@@ -1135,12 +1245,12 @@ namespace RailwayCI
 
             while (PartsOfStation[i].Right != null || PartsOfStation[i].TypeOfParts != Types.track)
             {
+                if (PartsOfStation[i].OccupancyState != OccupancyStates.available) return 0;
                 if (i == EndPoint)
                 {
                     //MessageBox.Show("11");
                     return 1;
                 }
-                if (PartsOfStation[i].OccupancyState != OccupancyStates.available) return 0;
                 if (PartsOfStation[EndPoint].LineNumber < PartsOfStation[i].LineNumber && PartsOfStation[i].Up != null)
                 {
                     if (PartsOfStation[i].TypeOfParts == Types.turnout && PartsOfStation[i].Up.Conditions == 0 && PartsOfStation[i].Up.Locked)
@@ -1163,7 +1273,6 @@ namespace RailwayCI
                         return 0;
                     i = PartsOfStation[i].Right.Number;
                 }
-
             }
             return 0;
         }
@@ -1190,6 +1299,7 @@ namespace RailwayCI
                             if (PartsOfStation[i].TypeOfParts == Types.frog && PartsOfStation[i].Conditions == 0)
                             {
                                 FrogChange(i);
+                                PartsOfStation[i].Rail.BorderColor = Color.White;
                             }
                             else if (PartsOfStation[i].Up.TypeOfParts == Types.frog && PartsOfStation[i].Up.Conditions == 0)
                             {
@@ -1201,7 +1311,6 @@ namespace RailwayCI
                         {
                             i = PartsOfStation[i].Right.Number;
                         }
-
                     }
                     else if (PartsOfStation[EndRail].LineNumber > PartsOfStation[i].LineNumber && PartsOfStation[i].Down != null)
                     {
@@ -1210,6 +1319,7 @@ namespace RailwayCI
                             if (PartsOfStation[i].TypeOfParts == Types.frog && PartsOfStation[i].Conditions == 0)
                             {
                                 FrogChange(i);
+                                PartsOfStation[i].Rail.BorderColor = Color.White;
                             }
                             else if (PartsOfStation[i].Down.TypeOfParts == Types.frog && PartsOfStation[i].Down.Conditions == 0)
                             {
@@ -1246,6 +1356,7 @@ namespace RailwayCI
                             if (PartsOfStation[i].TypeOfParts == Types.frog && PartsOfStation[i].Conditions == 0)
                             {
                                 FrogChange(i);
+                                PartsOfStation[i].Rail.BorderColor = Color.White;
                             }
                             else if (PartsOfStation[i].Up.TypeOfParts == Types.frog && PartsOfStation[i].Up.Conditions == 0)
                             {
@@ -1262,6 +1373,7 @@ namespace RailwayCI
                             if (PartsOfStation[i].TypeOfParts == Types.frog && PartsOfStation[i].Conditions == 0)
                             {
                                 FrogChange(i);
+                                PartsOfStation[i].Rail.BorderColor = Color.White;
                             }
                             else if (PartsOfStation[i].Down.TypeOfParts == Types.frog && PartsOfStation[i].Down.Conditions == 0)
                             {
@@ -1287,7 +1399,14 @@ namespace RailwayCI
             while (!Cleared)
             {
                 ThisPart.OccupancyState = OccupancyStates.available;
-                ThisPart.Rail.BorderColor = Color.FromArgb(85, 120, 182);
+                if (ThisPart.TypeOfParts != Types.frog)
+                    ThisPart.Rail.BorderColor = Color.FromArgb(85, 120, 182);
+                else if (!ThisPart.Changeable)
+                    ThisPart.Rail.BorderColor = Color.FromArgb(85, 120, 182);
+                else if (ThisPart.Conditions != 0)
+                    ThisPart.Rail.BorderColor = Color.FromArgb(255, 255, 0);
+                else
+                    ThisPart.Rail.BorderColor = Color.FromArgb(0, 255, 0);
                 if (ThisPart.Up != null && ThisPart.Up.OccupancyState == OccupancyStates.occupied)
                 {
                     ThisPart = ThisPart.Up;
