@@ -134,7 +134,7 @@ namespace RailwayCI
                 {
                     int j = ThisSignal.Left != null ? ThisSignal.Left.Number : ThisSignal.Right.Number;
                     PartsOfStations ThisRail = PartsOfStation[j];
-                    if (ThisRail.OccupancyState == OccupancyStates.occupied && (ThisRail.RoutePoint == RoutePoints.TrainPoint || ThisRail.RoutePoint == RoutePoints.TrainStart))
+                    if (ThisRail.OccupancyState == OccupancyStates.occupied && (ThisRail.RoutePoint == RoutePoints.TrainPoint || ThisRail.RoutePoint == RoutePoints.TrainStart || ThisRail.RoutePoint == RoutePoints.TrainEnd))
                     {
                         if ((ThisSignal.Right == null && ThisRail.OccupancyDirection == OccupancyDirections.right) || (ThisSignal.Left == null && ThisRail.OccupancyDirection == OccupancyDirections.left))
                         {
@@ -152,7 +152,7 @@ namespace RailwayCI
                 {
                     int j = ThisSignal.Left != null ? ThisSignal.Left.Number : ThisSignal.Right.Number;
                     PartsOfStations ThisRail = PartsOfStation[j];
-                    if (ThisRail.OccupancyState == OccupancyStates.occupied && (ThisRail.RoutePoint == RoutePoints.ShuntingPoint || ThisRail.RoutePoint == RoutePoints.ShuntingStart))
+                    if (ThisRail.OccupancyState == OccupancyStates.occupied && (ThisRail.RoutePoint == RoutePoints.ShuntingPoint || ThisRail.RoutePoint == RoutePoints.ShuntingStart || ThisRail.RoutePoint == RoutePoints.ShuntingEnd))
                     {
                         if ((ThisSignal.Right == null && ThisRail.OccupancyDirection == OccupancyDirections.right) || (ThisSignal.Left == null && ThisRail.OccupancyDirection == OccupancyDirections.left))
                         {
@@ -169,7 +169,7 @@ namespace RailwayCI
                 {
                     int j = ThisSignal.Left != null ? ThisSignal.Left.Number : ThisSignal.Right.Number;
                     PartsOfStations ThisRail = PartsOfStation[j];
-                    if (ThisRail.OccupancyState == OccupancyStates.occupied && (ThisRail.RoutePoint == RoutePoints.TrainPoint || ThisRail.RoutePoint == RoutePoints.TrainStart))
+                    if (ThisRail.OccupancyState == OccupancyStates.occupied && (ThisRail.RoutePoint == RoutePoints.TrainPoint || ThisRail.RoutePoint == RoutePoints.TrainStart || ThisRail.RoutePoint == RoutePoints.TrainEnd))
                     {
                         if ((ThisSignal.Right == null && ThisRail.OccupancyDirection == OccupancyDirections.right) || (ThisSignal.Left == null && ThisRail.OccupancyDirection == OccupancyDirections.left))
                         {
@@ -177,7 +177,7 @@ namespace RailwayCI
                             ThisSignal.SignalPainting.UpLight.FillColor = Color.FromArgb(255, 255, 0);
                         }
                     }
-                    else if (ThisRail.OccupancyState == OccupancyStates.occupied && (ThisRail.RoutePoint == RoutePoints.ShuntingPoint || ThisRail.RoutePoint == RoutePoints.ShuntingStart))
+                    else if (ThisRail.OccupancyState == OccupancyStates.occupied && (ThisRail.RoutePoint == RoutePoints.ShuntingPoint || ThisRail.RoutePoint == RoutePoints.ShuntingStart || ThisRail.RoutePoint == RoutePoints.ShuntingEnd))
                     {
                         if ((ThisSignal.Right == null && ThisRail.OccupancyDirection == OccupancyDirections.right) || (ThisSignal.Left == null && ThisRail.OccupancyDirection == OccupancyDirections.left))
                         {
@@ -562,7 +562,7 @@ namespace RailwayCI
                     };
                     if (thisPart.Directions == "上方")
                         thisPart.NameLabel.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 50, thisPart.SignalPainting.BaseLine.Y1 - 40);
-                    else thisPart.NameLabel.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 50, thisPart.SignalPainting.BaseLine.Y1 + 70);
+                    else thisPart.NameLabel.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 50, thisPart.SignalPainting.BaseLine.Y1 + 45);
                     this.Controls.Add(thisPart.NameLabel);
                 }
             }
