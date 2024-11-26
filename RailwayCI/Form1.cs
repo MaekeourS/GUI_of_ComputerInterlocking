@@ -639,7 +639,7 @@ namespace RailwayCI
                     thisPart.LockSign = new OvalShape();
                     thisPart.LockSign.Location = new Point(thisPart.Rail.X1, thisPart.Rail.Y1 - thisPart.Length / 2);
                     thisPart.LockSign.Size = new Size(thisPart.Length, thisPart.Length);
-                    thisPart.LockSign.BorderColor = Color.White;
+                    thisPart.LockSign.BorderColor = Color.Red;
                     thisPart.LockSign.Visible = false;
                     thisPart.LockSign.Click += LockSignClicked;
                     shapeContainer.Shapes.Add(thisPart.LockSign);
@@ -832,10 +832,12 @@ namespace RailwayCI
 
         private void 站场数据ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();// 创建 SaveFileDialog 的实例
-            saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";// 设置过滤器，只允许保存文本文件
-            saveFileDialog.DefaultExt = "txt";// 设置默认文件扩展名为 .txt
-            saveFileDialog.FileName = StationName + "站 站场数据";
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*",// 设置过滤器，只允许保存文本文件
+                DefaultExt = "txt",// 设置默认文件扩展名为 .txt
+                FileName = StationName + "站 站场数据"
+            };// 创建 SaveFileDialog 的实例
             if (saveFileDialog.ShowDialog() == DialogResult.OK)// 显示对话框，如果用户点击了“保存”按钮则继续执行
             {
                 string filePath = saveFileDialog.FileName;// 获取要保存的文件路径
@@ -1554,6 +1556,43 @@ namespace RailwayCI
                     ThisPart = ThisPart.Right;
                 }
                 else Cleared = true;
+            }
+        }
+        private void 站场事件记录ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Text Files (*.txt)|*.txt",
+                Title = "Save Data as Text File",
+                FileName = StationName + "站 站场事件记录"
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                using (StreamWriter sw = new StreamWriter(saveFileDialog.FileName))
+                {
+                    for (int i = 0; i < dataGridView1.Columns.Count; i++)
+                    {
+                        sw.Write(dataGridView1.Columns[i].HeaderText);
+                        if (i < dataGridView1.Columns.Count - 1)
+                            sw.Write("\t");
+                    }
+                    sw.WriteLine();
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    {
+                        if (!row.IsNewRow)
+                        {
+                            for (int j = 0; j < row.Cells.Count; j++)
+                            {
+                                sw.Write(row.Cells[j].Value?.ToString());
+                                if (j < row.Cells.Count - 1)
+                                    sw.Write("\t");
+                            }
+                            sw.WriteLine();
+                        }
+                    }
+                }
+                MessageBox.Show("文件已成功保存到: " + saveFileDialog.FileName);
             }
         }
     }
