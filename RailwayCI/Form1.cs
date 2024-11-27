@@ -230,7 +230,7 @@ namespace RailwayCI
 
         public void DataTransforming()
         {
-
+            DataClearing();
             string[] EachDatas = StationData.Split(';');
             int i = 0, j = 0;
             foreach (string EachData in EachDatas)
@@ -876,6 +876,10 @@ namespace RailwayCI
         {
             StationData = "";
             SignalTimer.Stop();
+            DataClearing();
+        }
+        private void DataClearing()
+        {
             for (int i = 0; i < PartsOfStation.Length; i++)
             {
                 if (PartsOfStation[i] != null)// 如果PartsOfStations实例包含LineShape等，也需要从父控件中移除它们
@@ -917,7 +921,6 @@ namespace RailwayCI
             SectionNumber = 0;
             dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "重置站场数据");
         }
-
         private void 站场图片ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (Bitmap bitmap = new Bitmap(this.Width, this.Height))// 创建一个Bitmap对象，其大小与当前窗口相同
@@ -1051,7 +1054,8 @@ namespace RailwayCI
                             PartsOfStation[i].RoutePoint = RoutePoints.TrainEnd;
                             TurningFlag = -1;
                         }
-                        PartsOfStation[TurningFlag].RoutePoint = RoutePoints.Other;
+                        else
+                            PartsOfStation[TurningFlag].RoutePoint = RoutePoints.Other;
                     }
                     else
                     {
@@ -1563,7 +1567,7 @@ namespace RailwayCI
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "Text Files (*.txt)|*.txt",
-                Title = "Save Data as Text File",
+                Title = "导出为",
                 FileName = StationName + "站 站场事件记录"
             };
 
