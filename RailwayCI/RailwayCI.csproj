@@ -67,6 +67,12 @@
     <Compile Include="ImportingData.Designer.cs">
       <DependentUpon>ImportingData.cs</DependentUpon>
     </Compile>
+    <Compile Include="LabelDisplay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LabelDisplay.Designer.cs">
+      <DependentUpon>LabelDisplay.cs</DependentUpon>
+    </Compile>
     <Compile Include="NameChange.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -89,6 +95,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ImportingData.resx">
       <DependentUpon>ImportingData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LabelDisplay.resx">
+      <DependentUpon>LabelDisplay.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="NameChange.resx">
       <DependentUpon>NameChange.cs</DependentUpon>

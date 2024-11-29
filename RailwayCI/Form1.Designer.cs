@@ -64,6 +64,7 @@
             this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Incident = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DelayLabel = new System.Windows.Forms.Label();
+            this.LabelDisplayButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -130,21 +131,21 @@
             // 站场数据ToolStripMenuItem
             // 
             this.站场数据ToolStripMenuItem.Name = "站场数据ToolStripMenuItem";
-            this.站场数据ToolStripMenuItem.Size = new System.Drawing.Size(270, 36);
+            this.站场数据ToolStripMenuItem.Size = new System.Drawing.Size(268, 36);
             this.站场数据ToolStripMenuItem.Text = "站场数据(&D)";
             this.站场数据ToolStripMenuItem.Click += new System.EventHandler(this.站场数据ToolStripMenuItem_Click);
             // 
             // 站场事件记录ToolStripMenuItem
             // 
             this.站场事件记录ToolStripMenuItem.Name = "站场事件记录ToolStripMenuItem";
-            this.站场事件记录ToolStripMenuItem.Size = new System.Drawing.Size(270, 36);
+            this.站场事件记录ToolStripMenuItem.Size = new System.Drawing.Size(268, 36);
             this.站场事件记录ToolStripMenuItem.Text = "站场事件记录(&M)";
             this.站场事件记录ToolStripMenuItem.Click += new System.EventHandler(this.站场事件记录ToolStripMenuItem_Click);
             // 
             // 站场图片ToolStripMenuItem
             // 
             this.站场图片ToolStripMenuItem.Name = "站场图片ToolStripMenuItem";
-            this.站场图片ToolStripMenuItem.Size = new System.Drawing.Size(270, 36);
+            this.站场图片ToolStripMenuItem.Size = new System.Drawing.Size(268, 36);
             this.站场图片ToolStripMenuItem.Text = "站场图片(&P)";
             this.站场图片ToolStripMenuItem.Click += new System.EventHandler(this.站场图片ToolStripMenuItem_Click);
             // 
@@ -412,12 +413,24 @@
             this.DelayLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.DelayLabel.Visible = false;
             // 
+            // LabelDisplayButton
+            // 
+            this.LabelDisplayButton.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.LabelDisplayButton.Location = new System.Drawing.Point(1232, 814);
+            this.LabelDisplayButton.Name = "LabelDisplayButton";
+            this.LabelDisplayButton.Size = new System.Drawing.Size(98, 38);
+            this.LabelDisplayButton.TabIndex = 7;
+            this.LabelDisplayButton.Text = "显示";
+            this.LabelDisplayButton.UseVisualStyleBackColor = true;
+            this.LabelDisplayButton.Click += new System.EventHandler(this.LabelDisplayButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.WindowText;
             this.ClientSize = new System.Drawing.Size(1446, 852);
+            this.Controls.Add(this.LabelDisplayButton);
             this.Controls.Add(this.DelayLabel);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.MessageButton);
@@ -476,6 +489,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Time;
         private System.Windows.Forms.DataGridViewTextBoxColumn Incident;
         private System.Windows.Forms.Label DelayLabel;
+        private System.Windows.Forms.Button LabelDisplayButton;
     }
 }
 

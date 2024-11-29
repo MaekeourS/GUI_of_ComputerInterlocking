@@ -31,9 +31,12 @@ namespace RailwayCI
             SignalTimer.Interval = 1000;
             SignalTimer.Tick += SignalChange;
         }
-        public string StationData = "轨道,0/1DG,50,null,1DG;轨道,1DG,150,0/1DG,1DG/1;轨道,1DG/1,50,1DG,1;辙叉,1,上撇,1DG/1,1/IG,1/3,null;轨道,1/IG,150,1,IG;轨道,IG,380,1/IG,IG/2;轨道,IG/2,150,IG,2;道岔,1/3,撇形,3,1;辙叉,3,下撇,null,3/IIG,null,1/3;轨道,3/IIG,50,3,IIG;轨道,IIG,320,3/IIG,IIG/4;轨道,IIG/4,50,IIG,null;辙叉,4,下捺,IIG/4,null,null,2/4;道岔,2/4,捺形,4,2;辙叉,2,上捺,IG/2,2/2DG,2/4,null;轨道,2/2DG,50,2,null;轨道,2DG,150,2/2DG,2DG/0;轨道,2DG/0,50,2DG,null;列车调车信号机,X,上方,1DG,L;列车调车信号机,S,上方,2DG,R;调车信号机,D2,上方,IG,R;调车信号机,D1,上方,IG,L;调车信号机,D4,上方,IIG,R;调车信号机,D3,上方,IIG,L";
+        public string StationData = "轨道,0/1DG,50,null,1DG;轨道,1DG,150,0/1DG,1DG/1;轨道,1DG/1,50,1DG,1;辙叉,1,上撇,1DG/1,1/IG,1/3,null;轨道,1/IG,150,1,IG;轨道,IG,380,1/IG,IG/2;轨道,IG/2,150,IG,2;道岔,1/3,撇形,3,1;辙叉,3,下撇,null,3/IIG,null,1/3;轨道,3/IIG,50,3,IIG;轨道,IIG,450,3/IIG,IIG/4;轨道,IIG/4,50,IIG,null;辙叉,4,下捺,IIG/4,null,null,2/4;道岔,2/4,捺形,4,2;辙叉,2,上捺,IG/2,2/2DG,2/4,null;轨道,2/2DG,50,2,null;轨道,2DG,150,2/2DG,2DG/0;轨道,2DG/0,50,2DG,null;列车调车信号机,X,上方,1DG,L;列车调车信号机,S,上方,2DG,R;调车信号机,D2,下方,IG,R;调车信号机,D1,下方,IG,L;调车信号机,D4,上方,IIG,R;调车信号机,D3,上方,IIG,L";
         public string Password = "000000";//默认口令：六个零
         public bool PasswordFlag = false;
+        public bool SignalLabelDisplayFlag = true;
+        public bool TurningLabelDisplayFlag = true;
+        public bool RailLabelDisplayFlag = true;
         public int TurningFlag = -1;
         public int SectionNumber = 0;
         public int RailNumber = 0;
@@ -222,6 +225,30 @@ namespace RailwayCI
         {
             this.PasswordFlag = newFlag;
         }
+        private void HandleLabelDisplay(bool newSignalLabelDisplay, bool newTurningLabelDisplay, bool newRailLabelDisplay)
+        {
+            this.SignalLabelDisplayFlag = newSignalLabelDisplay;
+            this.TurningLabelDisplayFlag = newTurningLabelDisplay;
+            this.RailLabelDisplayFlag = newRailLabelDisplay;
+            for (int i = 0; i < SectionNumber; i++)
+            {
+                if (PartsOfStation[i].TypeOfParts >= Types.trainSignal)
+                {
+                    PartsOfStation[i].NameLabel.Visible = SignalLabelDisplayFlag;
+                }
+                else if (PartsOfStation[i].TypeOfParts == Types.frog)
+                {
+                    if (PartsOfStation[i].NameLabel != null)
+                        PartsOfStation[i].NameLabel.Visible = TurningLabelDisplayFlag;
+                }
+                else if (PartsOfStation[i].TypeOfParts == Types.track)
+                {
+                    if (PartsOfStation[i].NameLabel != null)
+                        PartsOfStation[i].NameLabel.Visible = RailLabelDisplayFlag;
+                }
+            }
+
+        }
         private void 关于ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var About = new About();
@@ -264,14 +291,14 @@ namespace RailwayCI
                         j++;
                         break;
                     case 1:
-                        PartsOfStation[i].Length = 100;
+                        PartsOfStation[i].Length = 50;
                         PartsOfStation[i].Directions = Details[2];
                         PartsOfStation[i].UpName = Details[3] == "null" ? "" : Details[3];
                         PartsOfStation[i].DownName = Details[4] == "null" ? "" : Details[4];
                         j++;
                         break;
                     case 2:
-                        PartsOfStation[i].Length = 30;
+                        PartsOfStation[i].Length = 15;
                         PartsOfStation[i].Directions = Details[2];
                         PartsOfStation[i].LeftName = Details[3] == "null" ? "" : Details[3];
                         PartsOfStation[i].RightName = Details[4] == "null" ? "" : Details[4];
@@ -430,7 +457,7 @@ namespace RailwayCI
             for (int i = 0; i < SectionNumber; i++)
             {
                 PartsOfStations thisPart = PartsOfStation[i];
-                int Height = thisPart.Directions == "上方" ? -50 : 20;
+                int Height = thisPart.Directions == "上方" ? -37 : 20;
                 if (thisPart.TypeOfParts >= Types.trainSignal)
                 {
                     thisPart.SignalPainting = new SignalPaintings();
@@ -444,30 +471,30 @@ namespace RailwayCI
                         thisPart.SignalPainting.BaseLine.X1 = thisPart.Right.Rail.X2;
                         thisPart.SignalPainting.BaseLine.Y1 = thisPart.Right.Rail.Y2 + Height;
                         thisPart.SignalPainting.BaseLine.X2 = thisPart.Right.Rail.X2;
-                        thisPart.SignalPainting.BaseLine.Y2 = thisPart.Right.Rail.Y2 + Height + 30;
+                        thisPart.SignalPainting.BaseLine.Y2 = thisPart.Right.Rail.Y2 + Height + 17;
                         thisPart.SignalPainting.BaseLine.BorderWidth = 2;
-                        thisPart.SignalPainting.BaseLine.BorderColor = Color.White;
+                        thisPart.SignalPainting.BaseLine.BorderColor = Color.FromArgb(85, 120, 182);
                         shapeContainer.Shapes.Add(thisPart.SignalPainting.BaseLine);
-                        thisPart.SignalPainting.DownLight.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 30, thisPart.SignalPainting.BaseLine.Y1);
-                        thisPart.SignalPainting.DownLight.Size = new Size(30, 30);
-                        thisPart.SignalPainting.DownLight.BorderColor = Color.White;
+                        thisPart.SignalPainting.DownLight.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 17, thisPart.SignalPainting.BaseLine.Y1);
+                        thisPart.SignalPainting.DownLight.Size = new Size(17, 17);
+                        thisPart.SignalPainting.DownLight.BorderColor = Color.FromArgb(85, 120, 182);
                         thisPart.SignalPainting.DownLight.FillColor = Color.Red;
                         if (thisPart.TypeOfParts == Types.shunttingSignal) thisPart.SignalPainting.DownLight.FillColor = Color.Blue;
                         thisPart.SignalPainting.DownLight.FillStyle = FillStyle.Solid;
                         shapeContainer.Shapes.Add(thisPart.SignalPainting.DownLight);
                         if (thisPart.TypeOfParts != Types.shunttingSignal)
                         {
-                            thisPart.SignalPainting.UpLight.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 60, thisPart.SignalPainting.BaseLine.Y1);
-                            thisPart.SignalPainting.UpLight.Size = new Size(30, 30);
-                            thisPart.SignalPainting.UpLight.BorderColor = Color.White;
+                            thisPart.SignalPainting.UpLight.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 34, thisPart.SignalPainting.BaseLine.Y1);
+                            thisPart.SignalPainting.UpLight.Size = new Size(17, 17);
+                            thisPart.SignalPainting.UpLight.BorderColor = Color.FromArgb(85, 120, 182);
                             thisPart.SignalPainting.UpLight.FillColor = Color.Black;
                             thisPart.SignalPainting.UpLight.FillStyle = FillStyle.Solid;
                             shapeContainer.Shapes.Add(thisPart.SignalPainting.UpLight);
                         }
                         if (thisPart.TypeOfParts == Types.trainSignal)
                         {
-                            thisPart.SignalPainting.TrainButton.Location = new Point(thisPart.SignalPainting.BaseLine.X1 + 10, thisPart.SignalPainting.BaseLine.Y1);
-                            thisPart.SignalPainting.TrainButton.Size = new Size(30, 30);
+                            thisPart.SignalPainting.TrainButton.Location = new Point(thisPart.SignalPainting.BaseLine.X1 + 5, thisPart.SignalPainting.BaseLine.Y1);
+                            thisPart.SignalPainting.TrainButton.Size = new Size(17, 17);
                             thisPart.SignalPainting.TrainButton.BorderColor = Color.White;
                             thisPart.SignalPainting.TrainButton.FillColor = Color.Green;
                             thisPart.SignalPainting.TrainButton.FillStyle = FillStyle.Solid;
@@ -476,18 +503,18 @@ namespace RailwayCI
                         }
                         if (thisPart.TypeOfParts >= Types.shunttingSignal)
                         {
-                            thisPart.SignalPainting.ShuntingButton.Location = new Point(thisPart.SignalPainting.BaseLine.X1 + 10, thisPart.SignalPainting.BaseLine.Y1);
-                            thisPart.SignalPainting.ShuntingButton.Size = new Size(30, 30);
+                            thisPart.SignalPainting.ShuntingButton.Location = new Point(thisPart.SignalPainting.BaseLine.X1 + 5, thisPart.SignalPainting.BaseLine.Y1);
+                            thisPart.SignalPainting.ShuntingButton.Size = new Size(17, 17);
                             thisPart.SignalPainting.ShuntingButton.BorderColor = Color.White;
-                            thisPart.SignalPainting.ShuntingButton.FillColor = Color.White;
+                            thisPart.SignalPainting.ShuntingButton.FillColor = Color.FromArgb(128, 128, 128);
                             thisPart.SignalPainting.ShuntingButton.FillStyle = FillStyle.Solid;
                             thisPart.SignalPainting.ShuntingButton.Click += ShuntingButtonClicked;
                             shapeContainer.Shapes.Add(thisPart.SignalPainting.ShuntingButton);
                         }
                         if (thisPart.TypeOfParts == Types.multifunctionSignal)
                         {
-                            thisPart.SignalPainting.TrainButton.Location = new Point(thisPart.SignalPainting.BaseLine.X1 + 50, thisPart.SignalPainting.BaseLine.Y1);
-                            thisPart.SignalPainting.TrainButton.Size = new Size(30, 30);
+                            thisPart.SignalPainting.TrainButton.Location = new Point(thisPart.SignalPainting.BaseLine.X1 + 27, thisPart.SignalPainting.BaseLine.Y1);
+                            thisPart.SignalPainting.TrainButton.Size = new Size(17, 17);
                             thisPart.SignalPainting.TrainButton.BorderColor = Color.White;
                             thisPart.SignalPainting.TrainButton.FillColor = Color.Green;
                             thisPart.SignalPainting.TrainButton.FillStyle = FillStyle.Solid;
@@ -501,30 +528,30 @@ namespace RailwayCI
                         thisPart.SignalPainting.BaseLine.X1 = thisPart.Left.Rail.X1;
                         thisPart.SignalPainting.BaseLine.Y1 = thisPart.Left.Rail.Y1 + Height;
                         thisPart.SignalPainting.BaseLine.X2 = thisPart.Left.Rail.X1;
-                        thisPart.SignalPainting.BaseLine.Y2 = thisPart.Left.Rail.Y1 + Height + 30;
+                        thisPart.SignalPainting.BaseLine.Y2 = thisPart.Left.Rail.Y1 + Height + 17;
                         thisPart.SignalPainting.BaseLine.BorderWidth = 2;
-                        thisPart.SignalPainting.BaseLine.BorderColor = Color.White;
+                        thisPart.SignalPainting.BaseLine.BorderColor = Color.FromArgb(85, 120, 182);
                         shapeContainer.Shapes.Add(thisPart.SignalPainting.BaseLine);
                         thisPart.SignalPainting.DownLight.Location = new Point(thisPart.SignalPainting.BaseLine.X1, thisPart.SignalPainting.BaseLine.Y1);
-                        thisPart.SignalPainting.DownLight.Size = new Size(30, 30);
-                        thisPart.SignalPainting.DownLight.BorderColor = Color.White;
+                        thisPart.SignalPainting.DownLight.Size = new Size(17, 17);
+                        thisPart.SignalPainting.DownLight.BorderColor = Color.FromArgb(85, 120, 182);
                         thisPart.SignalPainting.DownLight.FillColor = Color.Red;
                         if (thisPart.TypeOfParts == Types.shunttingSignal) thisPart.SignalPainting.DownLight.FillColor = Color.Blue;
                         thisPart.SignalPainting.DownLight.FillStyle = FillStyle.Solid;
                         shapeContainer.Shapes.Add(thisPart.SignalPainting.DownLight);
                         if (thisPart.TypeOfParts != Types.shunttingSignal)
                         {
-                            thisPart.SignalPainting.UpLight.Location = new Point(thisPart.SignalPainting.BaseLine.X1 + 30, thisPart.SignalPainting.BaseLine.Y1);
-                            thisPart.SignalPainting.UpLight.Size = new Size(30, 30);
-                            thisPart.SignalPainting.UpLight.BorderColor = Color.White;
+                            thisPart.SignalPainting.UpLight.Location = new Point(thisPart.SignalPainting.BaseLine.X1 + 17, thisPart.SignalPainting.BaseLine.Y1);
+                            thisPart.SignalPainting.UpLight.Size = new Size(17, 17);
+                            thisPart.SignalPainting.UpLight.BorderColor = Color.FromArgb(85, 120, 182);
                             thisPart.SignalPainting.UpLight.FillColor = Color.Black;
                             thisPart.SignalPainting.UpLight.FillStyle = FillStyle.Solid;
                             shapeContainer.Shapes.Add(thisPart.SignalPainting.UpLight);
                         }
                         if (thisPart.TypeOfParts == Types.trainSignal)
                         {
-                            thisPart.SignalPainting.TrainButton.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 40, thisPart.SignalPainting.BaseLine.Y1);
-                            thisPart.SignalPainting.TrainButton.Size = new Size(30, 30);
+                            thisPart.SignalPainting.TrainButton.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 22, thisPart.SignalPainting.BaseLine.Y1);
+                            thisPart.SignalPainting.TrainButton.Size = new Size(17, 17);
                             thisPart.SignalPainting.TrainButton.BorderColor = Color.White;
                             thisPart.SignalPainting.TrainButton.FillColor = Color.Green;
                             thisPart.SignalPainting.TrainButton.FillStyle = FillStyle.Solid;
@@ -533,18 +560,18 @@ namespace RailwayCI
                         }
                         if (thisPart.TypeOfParts >= Types.shunttingSignal)
                         {
-                            thisPart.SignalPainting.ShuntingButton.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 40, thisPart.SignalPainting.BaseLine.Y1);
-                            thisPart.SignalPainting.ShuntingButton.Size = new Size(30, 30);
+                            thisPart.SignalPainting.ShuntingButton.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 22, thisPart.SignalPainting.BaseLine.Y1);
+                            thisPart.SignalPainting.ShuntingButton.Size = new Size(17, 17);
                             thisPart.SignalPainting.ShuntingButton.BorderColor = Color.White;
-                            thisPart.SignalPainting.ShuntingButton.FillColor = Color.White;
+                            thisPart.SignalPainting.ShuntingButton.FillColor = Color.FromArgb(128, 128, 128);
                             thisPart.SignalPainting.ShuntingButton.FillStyle = FillStyle.Solid;
                             thisPart.SignalPainting.ShuntingButton.Click += ShuntingButtonClicked;
                             shapeContainer.Shapes.Add(thisPart.SignalPainting.ShuntingButton);
                         }
                         if (thisPart.TypeOfParts == Types.multifunctionSignal)
                         {
-                            thisPart.SignalPainting.TrainButton.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 80, thisPart.SignalPainting.BaseLine.Y1);
-                            thisPart.SignalPainting.TrainButton.Size = new Size(30, 30);
+                            thisPart.SignalPainting.TrainButton.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 44, thisPart.SignalPainting.BaseLine.Y1);
+                            thisPart.SignalPainting.TrainButton.Size = new Size(17, 17);
                             thisPart.SignalPainting.TrainButton.BorderColor = Color.White;
                             thisPart.SignalPainting.TrainButton.FillColor = Color.Green;
                             thisPart.SignalPainting.TrainButton.FillStyle = FillStyle.Solid;
@@ -561,8 +588,8 @@ namespace RailwayCI
                         ForeColor = Color.White
                     };
                     if (thisPart.Directions == "上方")
-                        thisPart.NameLabel.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 50, thisPart.SignalPainting.BaseLine.Y1 - 40);
-                    else thisPart.NameLabel.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 50, thisPart.SignalPainting.BaseLine.Y1 + 45);
+                        thisPart.NameLabel.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 50, thisPart.SignalPainting.BaseLine.Y1 - 35);
+                    else thisPart.NameLabel.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 50, thisPart.SignalPainting.BaseLine.Y1 + 27);
                     this.Controls.Add(thisPart.NameLabel);
                 }
             }
@@ -583,10 +610,10 @@ namespace RailwayCI
                     thisPart.InsulatedJoint = new LineShape
                     {
                         X1 = thisPart.Rail.X2,
-                        Y1 = thisPart.Rail.Y2 - 10,
+                        Y1 = thisPart.Rail.Y2 - 8,
                         X2 = thisPart.Rail.X2,
-                        Y2 = thisPart.Rail.Y2 + 10,
-                        BorderColor = Color.White,
+                        Y2 = thisPart.Rail.Y2 + 8,
+                        BorderColor = Color.FromArgb(85, 120, 182),
                         BorderWidth = 2
                     };
                     shapeContainer.Shapes.Add(thisPart.InsulatedJoint);
@@ -615,7 +642,7 @@ namespace RailwayCI
                 else if (thisPart.Right == null)
                     if (thisPart.Directions == "上撇")
                     {
-                        if (!Direction) Xpoint -= 30;
+                        if (!Direction) Xpoint -= 15;
                         thisPart.Rail.X1 = Xpoint;
                         thisPart.Rail.Y1 = Ypoint;
                         thisPart.Rail.X2 = Xpoint + thisPart.Length;
@@ -623,7 +650,7 @@ namespace RailwayCI
                     }
                     else
                     {
-                        if (Direction) Xpoint -= 30;
+                        if (Direction) Xpoint -= 15;
                         thisPart.Rail.X1 = Xpoint;
                         thisPart.Rail.Y1 = Ypoint;
                         thisPart.Rail.X2 = Xpoint + thisPart.Length;
@@ -654,23 +681,23 @@ namespace RailwayCI
                     //Ypoint -= 30;
                     if (thisPart.Directions == "撇形")
                     {
-                        Xpoint += 30;
+                        Xpoint += 15;
                         thisPart.Rail.X1 = Xpoint;
-                        thisPart.Rail.Y1 = Ypoint + thisPart.Length - 30;
+                        thisPart.Rail.Y1 = Ypoint + thisPart.Length - 15;
                         Xpoint = Xpoint + thisPart.Length;
                         thisPart.Rail.X2 = Xpoint;
-                        thisPart.Rail.Y2 = Ypoint - 30;
+                        thisPart.Rail.Y2 = Ypoint - 15;
                     }
                     else
                     {
                         //Xpoint -= 30;
                         thisPart.Rail.X2 = Xpoint;
-                        thisPart.Rail.Y2 = Ypoint + thisPart.Length - 30;
+                        thisPart.Rail.Y2 = Ypoint + thisPart.Length - 15;
                         Xpoint = Xpoint - thisPart.Length;
                         thisPart.Rail.X1 = Xpoint;
-                        thisPart.Rail.Y1 = Ypoint - 30;
+                        thisPart.Rail.Y1 = Ypoint - 15;
                     }
-                    Ypoint -= 30;
+                    Ypoint -= 15;
                 }
                 else
                 {
@@ -686,24 +713,24 @@ namespace RailwayCI
                     }
                     else
                     {
-                        Xpoint += 30;
+                        Xpoint += 15;
                         thisPart.Rail.X1 = Xpoint;
                         thisPart.Rail.Y1 = Ypoint;
                         Xpoint = Xpoint + thisPart.Length;
                         thisPart.Rail.X2 = Xpoint;
                         thisPart.Rail.Y2 = Ypoint + thisPart.Length;
                     }
-                    Ypoint += 30;
+                    Ypoint += 15;
                 }
                 if (thisPart.Directions == "撇形")
                 {
                     thisPart.InsulatedJoint = new LineShape
                     {
-                        X1 = (thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - 10,
-                        Y1 = (thisPart.Rail.Y1 + thisPart.Rail.Y2) / 2 - 10,
-                        X2 = (thisPart.Rail.X1 + thisPart.Rail.X2) / 2 + 10,
-                        Y2 = (thisPart.Rail.Y1 + thisPart.Rail.Y2) / 2 + 10,
-                        BorderColor = Color.White,
+                        X1 = (thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - 5,
+                        Y1 = (thisPart.Rail.Y1 + thisPart.Rail.Y2) / 2 - 5,
+                        X2 = (thisPart.Rail.X1 + thisPart.Rail.X2) / 2 + 5,
+                        Y2 = (thisPart.Rail.Y1 + thisPart.Rail.Y2) / 2 + 5,
+                        BorderColor = Color.FromArgb(85, 120, 182),
                         BorderWidth = 2
                     };
                     shapeContainer.Shapes.Add(thisPart.InsulatedJoint);
@@ -712,11 +739,11 @@ namespace RailwayCI
                 {
                     thisPart.InsulatedJoint = new LineShape
                     {
-                        X1 = (thisPart.Rail.X1 + thisPart.Rail.X2) / 2 + 10,
-                        Y1 = (thisPart.Rail.Y1 + thisPart.Rail.Y2) / 2 - 10,
-                        X2 = (thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - 10,
-                        Y2 = (thisPart.Rail.Y1 + thisPart.Rail.Y2) / 2 + 10,
-                        BorderColor = Color.White,
+                        X1 = (thisPart.Rail.X1 + thisPart.Rail.X2) / 2 + 5,
+                        Y1 = (thisPart.Rail.Y1 + thisPart.Rail.Y2) / 2 - 5,
+                        X2 = (thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - 5,
+                        Y2 = (thisPart.Rail.Y1 + thisPart.Rail.Y2) / 2 + 5,
+                        BorderColor = Color.FromArgb(85, 120, 182),
                         BorderWidth = 2
                     };
                     shapeContainer.Shapes.Add(thisPart.InsulatedJoint);
@@ -725,7 +752,7 @@ namespace RailwayCI
 
             if (thisPart.Rail != null)
             {
-                thisPart.Rail.BorderWidth = 10;
+                thisPart.Rail.BorderWidth = 5;
                 if (thisPart.TypeOfParts != Types.frog)
                     thisPart.Rail.BorderColor = Color.FromArgb(85, 120, 182);
                 else if (!thisPart.Changeable)
@@ -739,7 +766,7 @@ namespace RailwayCI
             {
                 thisPart.NameLabel = new Label
                 {
-                    Location = new Point((thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - 60, thisPart.Rail.Y2 + 20),
+                    Location = new Point((thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - 60, thisPart.Rail.Y2 + 15),
                     Font = new Font("Microsoft YaHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(134))),
                     Size = new Size(120, 25),
                     Text = thisPart.NameOfParts,
@@ -747,10 +774,16 @@ namespace RailwayCI
                     ForeColor = Color.White
                 };
                 if (thisPart.TypeOfParts == Types.track && (thisPart.Right == null || thisPart.Left == null || (thisPart.Right != null && thisPart.Right.TypeOfParts == Types.frog) || (thisPart.Left != null && thisPart.Left.TypeOfParts == Types.frog)))
-                    thisPart.NameLabel.Visible = false;
+                {
+                    thisPart.NameLabel.Dispose();
+                }
+                else
+                {
                 if (thisPart.TypeOfParts == Types.frog && (thisPart.Directions == "下撇" || thisPart.Directions == "下捺"))
                     thisPart.NameLabel.Location = new Point((thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - 60, thisPart.Rail.Y2 - 40);
                 this.Controls.Add(thisPart.NameLabel);
+                }
+
             }
             thisPart.Painted = true;
             if (thisPart.Right != null && !thisPart.Right.Painted) EachPartPainting(thisPart.Right, Xpoint + thisPart.Length, Ypoint, shapeContainer, false);
@@ -985,6 +1018,7 @@ namespace RailwayCI
         private void NewButtonLocation()
         {
             MessageButton.Location = new Point(this.Width - 30 - MessageButton.Width, this.Height - 55 - MessageButton.Height);
+            LabelDisplayButton.Location = new Point(MessageButton.Location.X - LabelDisplayButton.Width - 10, MessageButton.Location.Y);
         }
         private void NewListLocation()
         {
@@ -1281,7 +1315,7 @@ namespace RailwayCI
             PartsOfStations ThisPart = PartsOfStation[FrogChosed];
             if (ThisPart.Changeable)
             {
-                int ChangeLength = 30;
+                int ChangeLength = 15;
                 if (ThisPart.Conditions != 0)//反位转为定位
                 {
                     ChangeLength = -ChangeLength;
@@ -1598,6 +1632,16 @@ namespace RailwayCI
                 }
                 MessageBox.Show("文件已成功保存到: " + saveFileDialog.FileName);
             }
+        }
+
+        private void LabelDisplayButton_Click(object sender, EventArgs e)
+        {
+            var labelDisplay = new LabelDisplay();
+            labelDisplay.LabelDisplayChanged += HandleLabelDisplay;
+            labelDisplay.SignalLabelDisplayFlag = this.SignalLabelDisplayFlag;
+            labelDisplay.TurningLabelDisplayFlag = this.TurningLabelDisplayFlag;
+            labelDisplay.RailLabelDisplayFlag = this.RailLabelDisplayFlag;
+            labelDisplay.ShowDialog(this);
         }
     }
 }
