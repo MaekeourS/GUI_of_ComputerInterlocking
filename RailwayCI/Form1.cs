@@ -32,7 +32,7 @@ namespace RailwayCI
             SignalTimer.Tick += SignalChange;
         }
         public string StationData = "轨道,0/1DG,50,null,1DG;轨道,1DG,150,0/1DG,1DG/1;轨道,1DG/1,50,1DG,1;辙叉,1,上撇,1DG/1,1/IG,1/3,null;轨道,1/IG,150,1,IG;轨道,IG,380,1/IG,IG/2;轨道,IG/2,150,IG,2;道岔,1/3,撇形,3,1;辙叉,3,下撇,null,3/IIG,null,1/3;轨道,3/IIG,50,3,IIG;轨道,IIG,450,3/IIG,IIG/4;轨道,IIG/4,50,IIG,null;辙叉,4,下捺,IIG/4,null,null,2/4;道岔,2/4,捺形,4,2;辙叉,2,上捺,IG/2,2/2DG,2/4,null;轨道,2/2DG,50,2,null;轨道,2DG,150,2/2DG,2DG/0;轨道,2DG/0,50,2DG,null;列车调车信号机,X,上方,1DG,L;列车调车信号机,S,上方,2DG/0,L;调车信号机,D2,下方,IG/2,L;调车信号机,D1,下方,1/IG,R;调车信号机,D4,上方,IIG/4,L;调车信号机,D3,上方,3/IIG,R";
-        public string Password = "000000";//默认口令：六个零
+        public string Password = "123";//默认口令：123
         public bool PasswordFlag = false;
         public bool SignalLabelDisplayFlag = true;
         public bool TurningLabelDisplayFlag = true;
@@ -77,7 +77,7 @@ namespace RailwayCI
             public SignalPaintings SignalPainting;
             public Label NameLabel;
         }
-        PartsOfStations[] PartsOfStation = new PartsOfStations[100];
+        PartsOfStations[] PartsOfStation = new PartsOfStations[300];
         public class SignalPaintings
         {
             public LineShape BaseLine;
@@ -94,7 +94,7 @@ namespace RailwayCI
             set
             {
                 label1.Text = value;
-                this.Text = "计算机联锁控显端仿真 —— " + value + "站";
+                this.Text = "计算机联锁控显端仿真 —— " + value;
             }
         }
         private void Timer_Tick(object sender, EventArgs e)
@@ -443,7 +443,7 @@ namespace RailwayCI
         }
         public void PartPainting()//绘图
         {
-            int Xpoint = 200, Ypoint = 500;
+            int Xpoint = 100, Ypoint = 500;
             ShapeContainer shapeContainer = new ShapeContainer();
             shapeContainer.Location = new System.Drawing.Point(0, 0);
             shapeContainer.Size = this.Size;
@@ -581,15 +581,16 @@ namespace RailwayCI
                     }
                     thisPart.NameLabel = new Label
                     {
-                        Font = new Font("Microsoft YaHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(134))),
-                        Size = new Size(100, 25),
+                        Font = new Font("宋体", 9.75F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(134))),
+                        //Size = new Size(100, 25),
                         Text = thisPart.NameOfParts,
                         TextAlign = ContentAlignment.MiddleCenter,
                         ForeColor = Color.White
                     };
+                    thisPart.NameLabel.Size = new Size(thisPart.NameLabel.Text.Length * 20, 25);
                     if (thisPart.Directions == "上方")
-                        thisPart.NameLabel.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 50, thisPart.SignalPainting.BaseLine.Y1 - 35);
-                    else thisPart.NameLabel.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - 50, thisPart.SignalPainting.BaseLine.Y1 + 27);
+                        thisPart.NameLabel.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - thisPart.NameLabel.Text.Length * 10, thisPart.SignalPainting.BaseLine.Y1 - 35);
+                    else thisPart.NameLabel.Location = new Point(thisPart.SignalPainting.BaseLine.X1 - thisPart.NameLabel.Text.Length * 10, thisPart.SignalPainting.BaseLine.Y1 + 27);
                     this.Controls.Add(thisPart.NameLabel);
                 }
             }
@@ -642,7 +643,7 @@ namespace RailwayCI
                 else if (thisPart.Right == null)
                     if (thisPart.Directions == "上撇")
                     {
-                        if (!Direction && thisPart.Up.Painted) Xpoint -= 15;
+                        //if (!Direction && thisPart.Up.Painted) Xpoint -= 15;
                         thisPart.Rail.X1 = Xpoint;
                         thisPart.Rail.Y1 = Ypoint;
                         thisPart.Rail.X2 = Xpoint + thisPart.Length;
@@ -769,13 +770,13 @@ namespace RailwayCI
                 thisPart.NameLabel = new Label
                 {
                     //Location = new Point((thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - 60, thisPart.Rail.Y2 + 15),
-                    Font = new Font("Microsoft YaHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(134))),
+                    Font = new Font("宋体", 9.75F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(134))),
                     //Size = new Size(120, 25),
                     Text = thisPart.NameOfParts,
                     TextAlign = ContentAlignment.MiddleCenter,
                     ForeColor = Color.White
                 };
-                thisPart.NameLabel.Location = new Point((thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - thisPart.NameLabel.Text.Length * 10, thisPart.Rail.Y2 + 15);
+                thisPart.NameLabel.Location = new Point((thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - thisPart.NameLabel.Text.Length * 10, thisPart.Rail.Y2 + 10);
                 thisPart.NameLabel.Size = new Size(thisPart.NameLabel.Text.Length * 20,25);
                 if (thisPart.TypeOfParts == Types.track && (thisPart.Right == null || thisPart.Left == null || (thisPart.Right != null && thisPart.Right.TypeOfParts == Types.frog) || (thisPart.Left != null && thisPart.Left.TypeOfParts == Types.frog)))
                 {
@@ -784,7 +785,7 @@ namespace RailwayCI
                 else
                 {
                 if (thisPart.TypeOfParts == Types.frog && (thisPart.Directions == "下撇" || thisPart.Directions == "下捺"))
-                    thisPart.NameLabel.Location = new Point((thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - thisPart.NameLabel.Text.Length * 10, thisPart.Rail.Y2 - 40);
+                    thisPart.NameLabel.Location = new Point((thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - thisPart.NameLabel.Text.Length * 10, thisPart.Rail.Y2 - 35);
                 this.Controls.Add(thisPart.NameLabel);
                 }
 
@@ -859,6 +860,19 @@ namespace RailwayCI
                         if (NewData != "")
                         {
                             StationData = NewData;
+                            string TempName = openFileDialog.SafeFileName;
+                            int underscoreIndex = TempName.IndexOf('_');
+                            if (underscoreIndex != -1)
+                            {
+                                StationName = TempName.Substring(0, underscoreIndex);
+                            }
+                            else
+                            {
+                                var nameChangeForm = new NameChange();
+                                nameChangeForm.NameChanged += HandleNameChanged;
+                                nameChangeForm.ShowDialog(this);
+                            }
+                            NewTitleLocation();
                             DataTransforming();
                         }
                         else MessageBox.Show("站场数据不能为空！");
@@ -873,7 +887,7 @@ namespace RailwayCI
             {
                 Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*",// 设置过滤器，只允许保存文本文件
                 DefaultExt = "txt",// 设置默认文件扩展名为 .txt
-                FileName = StationName + "站 站场数据"
+                FileName = StationName + "_站场数据"
             };// 创建 SaveFileDialog 的实例
             if (saveFileDialog.ShowDialog() == DialogResult.OK)// 显示对话框，如果用户点击了“保存”按钮则继续执行
             {
@@ -969,7 +983,7 @@ namespace RailwayCI
                 SaveFileDialog saveFileDialog = new SaveFileDialog// 使用SaveFileDialog让用户选择保存文件的位置
                 {
                     Filter = "JPEG Image|*.jpg;*.jpeg|PNG Image|*.png|BMP Image|*.bmp",
-                    FileName = StationName + "站站场图  " + DateTime.Now.ToString("yyyy年MM月dd日 HH时mm分ss秒"),
+                    FileName = StationName + "_站场图  " + DateTime.Now.ToString("yyyy年MM月dd日 HH时mm分ss秒"),
                     Title = "导出为"
                 };
 
@@ -1606,7 +1620,7 @@ namespace RailwayCI
             {
                 Filter = "Text Files (*.txt)|*.txt",
                 Title = "导出为",
-                FileName = StationName + "站 站场事件记录"
+                FileName = StationName + "_站场事件记录"
             };
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)

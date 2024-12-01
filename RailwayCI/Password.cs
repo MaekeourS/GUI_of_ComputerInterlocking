@@ -60,7 +60,7 @@ namespace RailwayCI
             string newPassword = textBox1.Text;
             if (this.Text == "设置保护口令")
             {
-                if (newPassword.Length == 6)
+                if (newPassword.Length >= 3)
                 {
                     OnPasswordChanged(newPassword);
                     this.Close();
