@@ -68,6 +68,8 @@ namespace RailwayCI
             public bool Painted = false;
             public bool Locked = false;
             public bool Changeable = false;
+            public bool lineChanged = false;
+            public bool Visited = false;
             public OccupancyStates OccupancyState;
             public OccupancyDirections OccupancyDirection;
             public RoutePoints RoutePoint;
@@ -141,7 +143,10 @@ namespace RailwayCI
                     {
                         if ((ThisSignal.Right == null && ThisRail.OccupancyDirection == OccupancyDirections.right) || (ThisSignal.Left == null && ThisRail.OccupancyDirection == OccupancyDirections.left))
                         {
-                            ThisSignal.SignalPainting.DownLight.FillColor = Color.Black;
+                            if (ThisRail.lineChanged)
+                                ThisSignal.SignalPainting.DownLight.FillColor = Color.FromArgb(255, 255, 0);
+                            else
+                                ThisSignal.SignalPainting.DownLight.FillColor = Color.Black;
                             ThisSignal.SignalPainting.UpLight.FillColor = Color.FromArgb(255, 255, 0);
                         }
                     }
@@ -166,7 +171,6 @@ namespace RailwayCI
                     {
                         ThisSignal.SignalPainting.DownLight.FillColor = Color.Blue;
                     }
-                    //待补全
                 }
                 else if (ThisSignal.TypeOfParts == Types.multifunctionSignal)
                 {
@@ -176,7 +180,10 @@ namespace RailwayCI
                     {
                         if ((ThisSignal.Right == null && ThisRail.OccupancyDirection == OccupancyDirections.right) || (ThisSignal.Left == null && ThisRail.OccupancyDirection == OccupancyDirections.left))
                         {
-                            ThisSignal.SignalPainting.DownLight.FillColor = Color.Black;
+                            if (ThisRail.lineChanged)
+                                ThisSignal.SignalPainting.DownLight.FillColor = Color.FromArgb(255, 255, 0);
+                            else
+                                ThisSignal.SignalPainting.DownLight.FillColor = Color.Black;
                             ThisSignal.SignalPainting.UpLight.FillColor = Color.FromArgb(255, 255, 0);
                         }
                     }
@@ -193,7 +200,6 @@ namespace RailwayCI
                         ThisSignal.SignalPainting.DownLight.FillColor = Color.Red;
                         ThisSignal.SignalPainting.UpLight.FillColor = Color.Black;
                     }
-                    //待补全
                 }
             }
         }
@@ -776,17 +782,19 @@ namespace RailwayCI
                     TextAlign = ContentAlignment.MiddleCenter,
                     ForeColor = Color.White
                 };
+                if (thisPart.TypeOfParts == Types.frog)
+                    thisPart.NameLabel.ForeColor = Color.FromArgb(0, 255, 0);
                 thisPart.NameLabel.Location = new Point((thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - thisPart.NameLabel.Text.Length * 10, thisPart.Rail.Y2 + 10);
-                thisPart.NameLabel.Size = new Size(thisPart.NameLabel.Text.Length * 20,25);
+                thisPart.NameLabel.Size = new Size(thisPart.NameLabel.Text.Length * 20, 25);
                 if (thisPart.TypeOfParts == Types.track && (thisPart.Right == null || thisPart.Left == null || (thisPart.Right != null && thisPart.Right.TypeOfParts == Types.frog) || (thisPart.Left != null && thisPart.Left.TypeOfParts == Types.frog)))
                 {
                     thisPart.NameLabel.Dispose();
                 }
                 else
                 {
-                if (thisPart.TypeOfParts == Types.frog && (thisPart.Directions == "下撇" || thisPart.Directions == "下捺"))
-                    thisPart.NameLabel.Location = new Point((thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - thisPart.NameLabel.Text.Length * 10, thisPart.Rail.Y2 - 35);
-                this.Controls.Add(thisPart.NameLabel);
+                    if (thisPart.TypeOfParts == Types.frog && (thisPart.Directions == "下撇" || thisPart.Directions == "下捺"))
+                        thisPart.NameLabel.Location = new Point((thisPart.Rail.X1 + thisPart.Rail.X2) / 2 - thisPart.NameLabel.Text.Length * 10, thisPart.Rail.Y2 - 35);
+                    this.Controls.Add(thisPart.NameLabel);
                 }
 
             }
@@ -974,11 +982,11 @@ namespace RailwayCI
         }
         private void 站场图片ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (Bitmap bitmap = new Bitmap(this.Width, this.Height))// 创建一个Bitmap对象，其大小与当前窗口相同
+            using (Bitmap bitmap = new Bitmap(this.Width - 50, this.Height - 200))// 创建一个Bitmap对象，其大小与当前窗口相同
             {
                 using (Graphics g = Graphics.FromImage(bitmap))// 使用Graphics对象从当前窗口绘制图像到Bitmap
                 {
-                    g.CopyFromScreen(this.Location, Point.Empty, this.Size);
+                    g.CopyFromScreen(new Point(this.Location.X + 25, this.Location.Y + 80), Point.Empty, new Size(this.Width - 50, this.Height - 200));
                 }
                 SaveFileDialog saveFileDialog = new SaveFileDialog// 使用SaveFileDialog让用户选择保存文件的位置
                 {
@@ -1102,6 +1110,7 @@ namespace RailwayCI
                         {
                             RouteDisplay(j, TurningFlag, Found, true);
                             RouteDisplay(TurningFlag, i, Found2, true);
+                            DoubleYellowSetting(i);
                             PartsOfStation[j].RoutePoint = RoutePoints.TrainStart;
                             PartsOfStation[i].RoutePoint = RoutePoints.TrainEnd;
                             TurningFlag = -1;
@@ -1115,6 +1124,7 @@ namespace RailwayCI
                         if (Found != 0)
                         {
                             RouteDisplay(j, i, Found, true);
+                            DoubleYellowSetting(i);
                             PartsOfStation[j].RoutePoint = RoutePoints.TrainStart;
                             PartsOfStation[i].RoutePoint = RoutePoints.TrainEnd;
                         }
@@ -1338,11 +1348,13 @@ namespace RailwayCI
                 {
                     ChangeLength = -ChangeLength;
                     ThisPart.Rail.BorderColor = Color.FromArgb(0, 255, 0);
+                    ThisPart.NameLabel.ForeColor = Color.FromArgb(0, 255, 0);
                     ThisPart.Conditions = 0;
                 }
                 else//定位转为反位
                 {
                     ThisPart.Rail.BorderColor = Color.FromArgb(255, 255, 0);
+                    ThisPart.NameLabel.ForeColor = Color.FromArgb(255, 255, 0);
                     ThisPart.Conditions = 1;
                 }
                 if (ThisPart.Directions == "上撇")
@@ -1577,6 +1589,55 @@ namespace RailwayCI
                     }
                 }
         }
+        private void DoubleYellowSetting(int EndPoint)
+        {
+            int i = PartsOfStation[EndPoint].Left != null ? PartsOfStation[EndPoint].Left.Number : PartsOfStation[EndPoint].Right.Number;
+            PartsOfStations ThisPart = PartsOfStation[i];
+            //MessageBox.Show(ThisPart.NameOfParts);
+            bool DoubleYellowSignal = false;
+            bool Cleared = false;
+            while (!Cleared)
+            {
+                ThisPart.Visited = true;
+                if (ThisPart.TypeOfParts == Types.frog)
+                {
+                    if (ThisPart.Conditions != 0 || !ThisPart.Changeable)
+                    {
+                        DoubleYellowSignal = true;
+                        //MessageBox.Show(ThisPart.NameOfParts);
+                    }
+                    //else DoubleYellowSignal = false;
+                }
+                if (ThisPart.TypeOfParts == Types.track && DoubleYellowSignal)
+                {
+                    ThisPart.lineChanged = true;
+                }
+                if (ThisPart.Up != null && ThisPart.Up.OccupancyState == OccupancyStates.occupied && !ThisPart.Up.Visited)
+                {
+                    ThisPart = ThisPart.Up;
+                    //MessageBox.Show("up");
+                }
+                else if (ThisPart.Down != null && ThisPart.Down.OccupancyState == OccupancyStates.occupied && !ThisPart.Down.Visited)
+                {
+                    ThisPart = ThisPart.Down;
+                    //MessageBox.Show("down");
+                }
+                else if (ThisPart.Left != null && ThisPart.Left.OccupancyState == OccupancyStates.occupied && !ThisPart.Left.Visited)
+                {
+                    ThisPart = ThisPart.Left;
+                    //MessageBox.Show("left");
+
+                }
+                else if (ThisPart.Right != null && ThisPart.Right.OccupancyState == OccupancyStates.occupied && !ThisPart.Right.Visited)
+                {
+                    ThisPart = ThisPart.Right;
+                    //MessageBox.Show("right");
+                }
+                else Cleared = true;
+                //MessageBox.Show(ThisPart.NameOfParts);
+
+            }
+        }
         private void RouteClearing(int StartPoint)//取消进路
         {
             int i = PartsOfStation[StartPoint].Left != null ? PartsOfStation[StartPoint].Left.Number : PartsOfStation[StartPoint].Right.Number;
@@ -1587,6 +1648,8 @@ namespace RailwayCI
                 ThisPart.OccupancyState = OccupancyStates.available;
                 ThisPart.OccupancyDirection = OccupancyDirections.none;
                 ThisPart.RoutePoint = RoutePoints.Other;
+                ThisPart.lineChanged = false;
+                ThisPart.Visited = false;
                 if (ThisPart.TypeOfParts != Types.frog)
                     ThisPart.Rail.BorderColor = Color.FromArgb(85, 120, 182);
                 else if (!ThisPart.Changeable)
