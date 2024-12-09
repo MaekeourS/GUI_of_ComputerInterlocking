@@ -56,7 +56,6 @@
             this.toolStripStatusLabel6 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel7 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel8 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel9 = new System.Windows.Forms.ToolStripStatusLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.MessageButton = new System.Windows.Forms.Button();
@@ -199,8 +198,7 @@
             this.toolStripStatusLabel5,
             this.toolStripStatusLabel6,
             this.toolStripStatusLabel7,
-            this.toolStripStatusLabel8,
-            this.toolStripStatusLabel9});
+            this.toolStripStatusLabel8});
             this.statusStrip1.Location = new System.Drawing.Point(0, 814);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 21, 0);
@@ -310,19 +308,6 @@
             this.toolStripStatusLabel8.Size = new System.Drawing.Size(88, 31);
             this.toolStripStatusLabel8.Text = " 总人解 ";
             this.toolStripStatusLabel8.Click += new System.EventHandler(this.toolStripStatusLabel_Click);
-            // 
-            // toolStripStatusLabel9
-            // 
-            this.toolStripStatusLabel9.BackColor = System.Drawing.Color.White;
-            this.toolStripStatusLabel9.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.toolStripStatusLabel9.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.toolStripStatusLabel9.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.toolStripStatusLabel9.Name = "toolStripStatusLabel9";
-            this.toolStripStatusLabel9.Size = new System.Drawing.Size(96, 31);
-            this.toolStripStatusLabel9.Text = "模拟行车";
-            this.toolStripStatusLabel9.Click += new System.EventHandler(this.toolStripStatusLabel_Click);
             // 
             // label1
             // 
@@ -478,7 +463,6 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel6;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel7;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel8;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel9;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStripMenuItem 直接输入ToolStripMenuItem;

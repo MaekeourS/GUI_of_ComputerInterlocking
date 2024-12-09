@@ -79,7 +79,7 @@ namespace RailwayCI
             public SignalPaintings SignalPainting;
             public Label NameLabel;
         }
-        PartsOfStations[] PartsOfStation = new PartsOfStations[300];
+        public PartsOfStations[] PartsOfStation = new PartsOfStations[300];
         public class SignalPaintings
         {
             public LineShape BaseLine;
@@ -213,7 +213,6 @@ namespace RailwayCI
         {
             this.StationData = newData;
             DataTransforming();
-            dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "导入新站场数据");
         }
         private void HandlePassword(string newPassword)
         {
@@ -261,7 +260,7 @@ namespace RailwayCI
             About.ShowDialog();
         }
 
-        public void DataTransforming()
+        private void DataTransforming()
         {
             DataClearing();
             string[] EachDatas = StationData.Split(';');
@@ -336,8 +335,9 @@ namespace RailwayCI
             RailNumber = j;
             DataConnecting();
             PartPainting();
+            dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "导入新站场数据");
         }
-        public void DataConnecting()//建立部件间引用
+        private void DataConnecting()//建立部件间引用
         {
             PartsOfStation[0].LineNumber = 5;
             for (int i = 0; i < SectionNumber; i++)
@@ -458,7 +458,7 @@ namespace RailwayCI
             this.Controls.Add(shapeContainer);
             SignalTimer.Start();
         }
-        public void LightPainting(ShapeContainer shapeContainer)//信号机绘制
+        private void LightPainting(ShapeContainer shapeContainer)//信号机绘制
         {
             for (int i = 0; i < SectionNumber; i++)
             {
@@ -601,7 +601,7 @@ namespace RailwayCI
                 }
             }
         }
-        public void EachPartPainting(PartsOfStations thisPart, int Xpoint, int Ypoint, ShapeContainer shapeContainer, Boolean Direction)//轨道区段绘制
+        private void EachPartPainting(PartsOfStations thisPart, int Xpoint, int Ypoint, ShapeContainer shapeContainer, Boolean Direction)//轨道区段绘制
         {
             if (thisPart.TypeOfParts == Types.track)
             {
@@ -813,7 +813,7 @@ namespace RailwayCI
                 ClickedStatusLabel.BackColor = Color.White;
                 return;
             }
-            for (int j = 1; j <= 9; j++)
+            for (int j = 1; j <= 8; j++)
             {
                 if (j != i)
                 {
@@ -893,19 +893,18 @@ namespace RailwayCI
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*",// 设置过滤器，只允许保存文本文件
-                DefaultExt = "txt",// 设置默认文件扩展名为 .txt
+                Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*",
+                DefaultExt = "txt",
                 FileName = StationName + "_站场数据"
-            };// 创建 SaveFileDialog 的实例
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)// 显示对话框，如果用户点击了“保存”按钮则继续执行
+            };
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                string filePath = saveFileDialog.FileName;// 获取要保存的文件路径
                 string fileContent = StationData;// 要写入文件的字符串
-                using (StreamWriter writer = new StreamWriter(filePath))// 使用 StreamWriter 写入文件内容
+                using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName))
                 {
                     writer.Write(fileContent);
                 }
-                MessageBox.Show("文件已成功保存到: " + filePath);// 可选：显示消息框确认文件已保存
+                MessageBox.Show("文件已成功保存到: " + saveFileDialog.FileName);
             }
         }
 
@@ -936,6 +935,7 @@ namespace RailwayCI
             StationData = "";
             SignalTimer.Stop();
             DataClearing();
+            dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "重置站场数据");
         }
         private void DataClearing()
         {
@@ -978,7 +978,6 @@ namespace RailwayCI
                 }
             }
             SectionNumber = 0;
-            dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "重置站场数据");
         }
         private void 站场图片ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1002,12 +1001,15 @@ namespace RailwayCI
                         case ".jpg":
                         case ".jpeg":
                             bitmap.Save(saveFileDialog.FileName, ImageFormat.Jpeg);
+                            MessageBox.Show("文件已成功保存到: " + saveFileDialog.FileName);
                             break;
                         case ".png":
                             bitmap.Save(saveFileDialog.FileName, ImageFormat.Png);
+                            MessageBox.Show("文件已成功保存到: " + saveFileDialog.FileName);
                             break;
                         case ".bmp":
                             bitmap.Save(saveFileDialog.FileName, ImageFormat.Bmp);
+                            MessageBox.Show("文件已成功保存到: " + saveFileDialog.FileName);
                             break;
                         default:
                             MessageBox.Show("Unsupported file format.");
@@ -1114,6 +1116,7 @@ namespace RailwayCI
                             PartsOfStation[j].RoutePoint = RoutePoints.TrainStart;
                             PartsOfStation[i].RoutePoint = RoutePoints.TrainEnd;
                             TurningFlag = -1;
+                            dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "建立了一条列车变通进路");
                         }
                         else
                             PartsOfStation[TurningFlag].RoutePoint = RoutePoints.Other;
@@ -1127,6 +1130,7 @@ namespace RailwayCI
                             DoubleYellowSetting(i);
                             PartsOfStation[j].RoutePoint = RoutePoints.TrainStart;
                             PartsOfStation[i].RoutePoint = RoutePoints.TrainEnd;
+                            dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "建立了一条列车进路");
                         }
                         PartsOfStation[j].RoutePoint = RoutePoints.Other;
                         PartsOfStation[i].RoutePoint = RoutePoints.Other;
@@ -1192,6 +1196,7 @@ namespace RailwayCI
                             PartsOfStation[i].RoutePoint = RoutePoints.ShuntingEnd;
                             PartsOfStation[TurningFlag].RoutePoint = RoutePoints.Other;
                             TurningFlag = -1;
+                            dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "建立了一条调车变通进路");
                         }
                         else
                             PartsOfStation[TurningFlag].RoutePoint = RoutePoints.Other;
@@ -1204,6 +1209,7 @@ namespace RailwayCI
                             RouteDisplay(j, i, Found, false);
                             PartsOfStation[j].RoutePoint = RoutePoints.ShuntingStart;
                             PartsOfStation[i].RoutePoint = RoutePoints.ShuntingEnd;
+                            dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "建立了一条调车进路");
                         }
                         PartsOfStation[j].RoutePoint = RoutePoints.Other;
                         PartsOfStation[i].RoutePoint = RoutePoints.Other;
@@ -1643,6 +1649,10 @@ namespace RailwayCI
             int i = PartsOfStation[StartPoint].Left != null ? PartsOfStation[StartPoint].Left.Number : PartsOfStation[StartPoint].Right.Number;
             PartsOfStations ThisPart = PartsOfStation[i];
             bool Cleared = false;
+            if (ThisPart.OccupancyState != OccupancyStates.available)
+            {
+                dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "取消了一条进路");
+            }
             while (!Cleared)
             {
                 ThisPart.OccupancyState = OccupancyStates.available;
