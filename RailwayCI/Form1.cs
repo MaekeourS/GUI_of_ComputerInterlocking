@@ -1096,14 +1096,20 @@ namespace RailwayCI
             }
             if (j < SectionNumber)
             {
-                if ((PartsOfStation[j].Right != null && PartsOfStation[i].Left != null) || (PartsOfStation[j].Left != null && PartsOfStation[i].Right != null))
+                if ((PartsOfStation[j].Right != null && PartsOfStation[i].Right != null) || (PartsOfStation[j].Left != null && PartsOfStation[i].Left != null))
                 {
                     PartsOfStation[i].RoutePoint = RoutePoints.turning;
+                    if (PartsOfStation[i].Right != null) i = PartsOfStation[i].Right.Number;
+                    else if (PartsOfStation[i].Left != null) i = PartsOfStation[i].Left.Number;
                     TurningFlag = i;
                 }
                 else
                 {
                     PartsOfStation[i].RoutePoint = RoutePoints.ending;
+                    if (PartsOfStation[i].Right != null) i = PartsOfStation[i].Right.Right.Number;
+                    else if (PartsOfStation[i].Left != null) i = PartsOfStation[i].Left.Left.Number;
+                    if (PartsOfStation[j].Right != null) j = PartsOfStation[j].Right.Number;
+                    else if (PartsOfStation[j].Left != null) j = PartsOfStation[j].Left.Number;
                     if (TurningFlag >= 0)
                     {
                         Found = RouteCreating(j, TurningFlag);
@@ -1118,8 +1124,6 @@ namespace RailwayCI
                             TurningFlag = -1;
                             dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "建立了一条列车变通进路");
                         }
-                        else
-                            PartsOfStation[TurningFlag].RoutePoint = RoutePoints.Other;
                     }
                     else
                     {
@@ -1132,9 +1136,10 @@ namespace RailwayCI
                             PartsOfStation[i].RoutePoint = RoutePoints.TrainEnd;
                             dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "建立了一条列车进路");
                         }
-                        PartsOfStation[j].RoutePoint = RoutePoints.Other;
-                        PartsOfStation[i].RoutePoint = RoutePoints.Other;
                     }
+                    for (int k = 0; k < SectionNumber; k++)
+                        if (PartsOfStation[k].TypeOfParts >= Types.trainSignal)
+                            PartsOfStation[k].RoutePoint = RoutePoints.Other;
                 }
             }
             else PartsOfStation[i].RoutePoint = RoutePoints.starting;
@@ -1179,11 +1184,17 @@ namespace RailwayCI
                 if ((PartsOfStation[j].Right != null && PartsOfStation[i].Left != null) || (PartsOfStation[j].Left != null && PartsOfStation[i].Right != null))
                 {
                     PartsOfStation[i].RoutePoint = RoutePoints.turning;
+                    if (PartsOfStation[i].Right != null) i = PartsOfStation[i].Right.Number;
+                    else if (PartsOfStation[i].Left != null) i = PartsOfStation[i].Left.Number;
                     TurningFlag = i;
                 }
                 else
                 {
                     PartsOfStation[i].RoutePoint = RoutePoints.ending;
+                    if (PartsOfStation[i].Right != null) i = PartsOfStation[i].Right.Right.Number;
+                    else if (PartsOfStation[i].Left != null) i = PartsOfStation[i].Left.Left.Number;
+                    if (PartsOfStation[j].Right != null) j = PartsOfStation[j].Right.Number;
+                    else if (PartsOfStation[j].Left != null) j = PartsOfStation[j].Left.Number;
                     if (TurningFlag >= 0)
                     {
                         Found = RouteCreating(j, TurningFlag);
@@ -1194,12 +1205,9 @@ namespace RailwayCI
                             RouteDisplay(TurningFlag, i, Found2, false);
                             PartsOfStation[j].RoutePoint = RoutePoints.ShuntingStart;
                             PartsOfStation[i].RoutePoint = RoutePoints.ShuntingEnd;
-                            PartsOfStation[TurningFlag].RoutePoint = RoutePoints.Other;
                             TurningFlag = -1;
                             dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "建立了一条调车变通进路");
                         }
-                        else
-                            PartsOfStation[TurningFlag].RoutePoint = RoutePoints.Other;
                     }
                     else
                     {
@@ -1211,9 +1219,10 @@ namespace RailwayCI
                             PartsOfStation[i].RoutePoint = RoutePoints.ShuntingEnd;
                             dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "建立了一条调车进路");
                         }
-                        PartsOfStation[j].RoutePoint = RoutePoints.Other;
-                        PartsOfStation[i].RoutePoint = RoutePoints.Other;
                     }
+                    for (int k = 0; k < SectionNumber; k++)
+                        if (PartsOfStation[k].TypeOfParts >= Types.trainSignal)
+                            PartsOfStation[k].RoutePoint = RoutePoints.Other;
                 }
             }
             else PartsOfStation[i].RoutePoint = RoutePoints.starting;
@@ -1383,15 +1392,12 @@ namespace RailwayCI
         }
         private int RouteCreating(int StartPoint, int EndPoint)//查找是否能建立进路
         {
-            int i = PartsOfStation[StartPoint].Left != null ? PartsOfStation[StartPoint].Left.Number : PartsOfStation[StartPoint].Right.Number;
-            EndPoint = PartsOfStation[EndPoint].Left != null ? PartsOfStation[EndPoint].Left.Number : PartsOfStation[EndPoint].Right.Number;
+            int i = StartPoint;
+            //EndPoint = PartsOfStation[EndPoint].Left != null ? PartsOfStation[EndPoint].Left.Number : PartsOfStation[EndPoint].Right.Number;
             while (PartsOfStation[i].Left != null || PartsOfStation[i].TypeOfParts != Types.track)
             {
                 if (PartsOfStation[i].OccupancyState != OccupancyStates.available) return 0;
-                if (PartsOfStation[i].Left == PartsOfStation[EndPoint])
-                {
-                    return -1;
-                }
+
                 if (PartsOfStation[EndPoint].LineNumber < PartsOfStation[i].LineNumber && PartsOfStation[i].Up != null)
                 {
                     if (PartsOfStation[i].TypeOfParts == Types.turnout && PartsOfStation[i].Up.Conditions == 0 && PartsOfStation[i].Up.Locked)
@@ -1414,19 +1420,18 @@ namespace RailwayCI
                         return 0;
                     i = PartsOfStation[i].Left.Number;
                 }
-
+                if (PartsOfStation[i].Left == PartsOfStation[EndPoint])
+                {
+                    return -1;
+                }
             }
-            i = PartsOfStation[StartPoint].Left != null ? PartsOfStation[StartPoint].Left.Number : PartsOfStation[StartPoint].Right.Number;
+            i = StartPoint;
 
             while (PartsOfStation[i].Right != null || PartsOfStation[i].TypeOfParts != Types.track)
             {
                 //MessageBox.Show(PartsOfStation[i].LineNumber.ToString());
                 if (PartsOfStation[i].OccupancyState != OccupancyStates.available) return 0;
-                if (PartsOfStation[i].Right == PartsOfStation[EndPoint])
-                {
-                    //MessageBox.Show(PartsOfStation[i].LineNumber.ToString());
-                    return 1;
-                }
+
                 if (PartsOfStation[EndPoint].LineNumber < PartsOfStation[i].LineNumber && PartsOfStation[i].Up != null)
                 {
                     if (PartsOfStation[i].TypeOfParts == Types.turnout && PartsOfStation[i].Up.Conditions == 0 && PartsOfStation[i].Up.Locked)
@@ -1449,26 +1454,31 @@ namespace RailwayCI
                         return 0;
                     i = PartsOfStation[i].Right.Number;
                 }
+                if (PartsOfStation[i].Right == PartsOfStation[EndPoint])
+                {
+                    //MessageBox.Show(PartsOfStation[i].LineNumber.ToString());
+                    return 1;
+                }
             }
             return 0;
         }
         private void RouteDisplay(int StartRail, int EndRail, int Flag, bool isTrainRoute)//建立进路并显示
         {
-            int i = PartsOfStation[StartRail].Left != null ? PartsOfStation[StartRail].Left.Number : PartsOfStation[StartRail].Right.Number;
-            EndRail = PartsOfStation[EndRail].Left != null ? PartsOfStation[EndRail].Left.Number : PartsOfStation[EndRail].Right.Number;
+            int i = StartRail;
+            //EndRail = PartsOfStation[EndRail].Left != null ? PartsOfStation[EndRail].Left.Number : PartsOfStation[EndRail].Right.Number;
             if (Flag == 0)
                 return;
             else if (Flag == 1)
-                while (PartsOfStation[i].Right != null || PartsOfStation[i].TypeOfParts != Types.track)
+                while (PartsOfStation[i].Right != null || PartsOfStation[i].TypeOfParts != Types.track || PartsOfStation[i] == PartsOfStation[EndRail])
                 {
                     PartsOfStation[i].Rail.BorderColor = Color.White;
                     PartsOfStation[i].OccupancyState = OccupancyStates.occupied;
                     PartsOfStation[i].OccupancyDirection = OccupancyDirections.right;
                     if (isTrainRoute) PartsOfStation[i].RoutePoint = RoutePoints.TrainPoint;
                     else PartsOfStation[i].RoutePoint = RoutePoints.ShuntingPoint;
-                    if (PartsOfStation[i].Right == PartsOfStation[EndRail])
+                    if (PartsOfStation[i] == PartsOfStation[EndRail])
                     {
-                        i = PartsOfStation[StartRail].Left != null ? PartsOfStation[StartRail].Left.Number : PartsOfStation[StartRail].Right.Number;
+                        i = StartRail;
                         if (isTrainRoute)
                         {
                             PartsOfStation[i].RoutePoint = RoutePoints.TrainStart;
@@ -1530,16 +1540,16 @@ namespace RailwayCI
                     }
                 }
             else if (Flag == -1)
-                while (PartsOfStation[i].Left != null || PartsOfStation[i].TypeOfParts != Types.track)
+                while (PartsOfStation[i].Left != null || PartsOfStation[i].TypeOfParts != Types.track || PartsOfStation[i] == PartsOfStation[EndRail])
                 {
                     PartsOfStation[i].Rail.BorderColor = Color.White;
                     PartsOfStation[i].OccupancyState = OccupancyStates.occupied;
                     PartsOfStation[i].OccupancyDirection = OccupancyDirections.left;
                     if (isTrainRoute) PartsOfStation[i].RoutePoint = RoutePoints.TrainPoint;
                     else PartsOfStation[i].RoutePoint = RoutePoints.ShuntingPoint;
-                    if (PartsOfStation[i].Left == PartsOfStation[EndRail])
+                    if (PartsOfStation[i] == PartsOfStation[EndRail])
                     {
-                        i = PartsOfStation[StartRail].Left != null ? PartsOfStation[StartRail].Left.Number : PartsOfStation[StartRail].Right.Number;
+                        i = StartRail;
                         if (isTrainRoute)
                         {
                             PartsOfStation[i].RoutePoint = RoutePoints.TrainStart;
@@ -1597,7 +1607,7 @@ namespace RailwayCI
         }
         private void DoubleYellowSetting(int EndPoint)
         {
-            int i = PartsOfStation[EndPoint].Left != null ? PartsOfStation[EndPoint].Left.Number : PartsOfStation[EndPoint].Right.Number;
+            int i = EndPoint;
             PartsOfStations ThisPart = PartsOfStation[i];
             //MessageBox.Show(ThisPart.NameOfParts);
             bool DoubleYellowSignal = false;
