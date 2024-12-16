@@ -454,9 +454,9 @@ namespace RailwayCI
             ShapeContainer shapeContainer = new ShapeContainer();
             shapeContainer.Location = new System.Drawing.Point(0, 0);
             shapeContainer.Size = this.Size;
+            this.Controls.Add(shapeContainer);
             await EachPartPainting(PartsOfStation[0], Xpoint, Ypoint, shapeContainer, true);
             //LightPainting(shapeContainer);
-            this.Controls.Add(shapeContainer);
             SignalTimer.Start();
         }
         private async Task LightPainting(ShapeContainer shapeContainer)//信号机绘制
@@ -800,11 +800,11 @@ namespace RailwayCI
 
             }
             thisPart.Painted = true;
-            await Task.Delay(100);
-            if (thisPart.Right != null && !thisPart.Right.Painted) EachPartPainting(thisPart.Right, Xpoint + thisPart.Length, Ypoint, shapeContainer, false);
-            if (thisPart.Up != null && !thisPart.Up.Painted) EachPartPainting(thisPart.Up, Xpoint, Ypoint - thisPart.Up.Length, shapeContainer, true);
-            if (thisPart.Down != null && !thisPart.Down.Painted) EachPartPainting(thisPart.Down, Xpoint, Ypoint + thisPart.Length, shapeContainer, false);
-            if (thisPart.Left != null && !thisPart.Left.Painted) EachPartPainting(thisPart.Left, Xpoint - thisPart.Left.Length, Ypoint, shapeContainer, false);
+            await Task.Delay(64);
+            if (thisPart.Right != null && !thisPart.Right.Painted) await EachPartPainting(thisPart.Right, Xpoint + thisPart.Length, Ypoint, shapeContainer, false);
+            if (thisPart.Up != null && !thisPart.Up.Painted) await EachPartPainting(thisPart.Up, Xpoint, Ypoint - thisPart.Up.Length, shapeContainer, true);
+            if (thisPart.Down != null && !thisPart.Down.Painted) await EachPartPainting(thisPart.Down, Xpoint, Ypoint + thisPart.Length, shapeContainer, false);
+            if (thisPart.Left != null && !thisPart.Left.Painted) await EachPartPainting(thisPart.Left, Xpoint - thisPart.Left.Length, Ypoint, shapeContainer, false);
         }
         private void toolStripStatusLabel_Click(object sender, EventArgs e)
         {
