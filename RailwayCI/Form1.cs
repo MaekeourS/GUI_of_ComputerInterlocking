@@ -1307,6 +1307,7 @@ namespace RailwayCI
                     {
                         PartsOfStation[i].OccupancyState = OccupancyStates.breakdown;
                         PartsOfStation[i].Rail.BorderColor = Color.Red;
+                        PartsOfStation[i].NameLabel.ForeColor = Color.Red;
                         toolStripStatusLabel5.BackColor = Color.White;
                     }
                 }
@@ -1315,7 +1316,24 @@ namespace RailwayCI
                     if (PartsOfStation[i].OccupancyState == OccupancyStates.breakdown)
                     {
                         PartsOfStation[i].OccupancyState = OccupancyStates.available;
-                        PartsOfStation[i].Rail.BorderColor = Color.FromArgb(85, 120, 182);
+                        if (PartsOfStation[i].TypeOfParts == Types.track)
+                        {
+                            PartsOfStation[i].Rail.BorderColor = Color.FromArgb(85, 120, 182);
+                            PartsOfStation[i].NameLabel.ForeColor = Color.White;
+                        }
+                        else if (PartsOfStation[i].TypeOfParts == Types.frog)
+                        {
+                            if (PartsOfStation[i].Conditions == 1)
+                            {
+                                PartsOfStation[i].Rail.BorderColor = Color.FromArgb(255, 255, 0);
+                                PartsOfStation[i].NameLabel.ForeColor = Color.FromArgb(255, 255, 0);
+                            }
+                            else if (PartsOfStation[i].Conditions == 0)
+                            {
+                                PartsOfStation[i].Rail.BorderColor = Color.FromArgb(0, 255, 0);
+                                PartsOfStation[i].NameLabel.ForeColor = Color.FromArgb(0, 255, 0);
+                            }
+                        }
                         toolStripStatusLabel6.BackColor = Color.White;
                     }
 
