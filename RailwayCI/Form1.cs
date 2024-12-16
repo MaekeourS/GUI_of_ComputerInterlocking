@@ -43,6 +43,7 @@ namespace RailwayCI
         public int RailNumber = 0;
         public int DelayTime = 3;
         public int CancelPart = -1;
+        public int PaintingDelayTime = 0;
         public System.Windows.Forms.Timer DelayTimer = new System.Windows.Forms.Timer();
         public System.Windows.Forms.Timer SignalTimer = new System.Windows.Forms.Timer();
         public enum Types { track, turnout, frog, trainSignal, shunttingSignal, multifunctionSignal };
@@ -335,7 +336,7 @@ namespace RailwayCI
             SectionNumber = i;
             RailNumber = j;
             DataConnecting();
-            PartPaintingAsync();
+            PartPainting();
             dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "导入新站场数据");
         }
         private void DataConnecting()//建立部件间引用
@@ -448,7 +449,7 @@ namespace RailwayCI
             }
 
         }
-        public async Task PartPaintingAsync()//绘图
+        public async Task PartPainting()//绘图
         {
             int Xpoint = 100, Ypoint = 500;
             ShapeContainer shapeContainer = new ShapeContainer();
@@ -457,6 +458,7 @@ namespace RailwayCI
             this.Controls.Add(shapeContainer);
             await EachPartPainting(PartsOfStation[0], Xpoint, Ypoint, shapeContainer, true);
             await LightPainting(shapeContainer);
+            MessageBox.Show("绘制完成");
             SignalTimer.Start();
         }
         private async Task LightPainting(ShapeContainer shapeContainer)//信号机绘制
@@ -467,7 +469,7 @@ namespace RailwayCI
                 int Height = thisPart.Directions == "上方" ? -37 : 20;
                 if (thisPart.TypeOfParts >= Types.trainSignal)
                 {
-                    await Task.Delay(24);
+                    await Task.Delay(PaintingDelayTime);
                     thisPart.SignalPainting = new SignalPaintings();
                     thisPart.SignalPainting.BaseLine = new LineShape();
                     thisPart.SignalPainting.DownLight = new OvalShape();
@@ -801,7 +803,7 @@ namespace RailwayCI
 
             }
             thisPart.Painted = true;
-            await Task.Delay(24);
+            await Task.Delay(PaintingDelayTime);
             if (thisPart.Right != null && !thisPart.Right.Painted) await EachPartPainting(thisPart.Right, Xpoint + thisPart.Length, Ypoint, shapeContainer, false);
             if (thisPart.Up != null && !thisPart.Up.Painted) await EachPartPainting(thisPart.Up, Xpoint, Ypoint - thisPart.Up.Length, shapeContainer, true);
             if (thisPart.Down != null && !thisPart.Down.Painted) await EachPartPainting(thisPart.Down, Xpoint, Ypoint + thisPart.Length, shapeContainer, false);
@@ -936,12 +938,12 @@ namespace RailwayCI
         private void 重置ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             StationData = "";
-            SignalTimer.Stop();
             DataClearing();
             dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "重置站场数据");
         }
         private void DataClearing()
         {
+            SignalTimer.Stop();
             for (int i = 0; i < PartsOfStation.Length; i++)
             {
                 if (PartsOfStation[i] != null)// 如果PartsOfStations实例包含LineShape等，也需要从父控件中移除它们
