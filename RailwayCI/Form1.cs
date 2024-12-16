@@ -12,6 +12,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Drawing.Imaging;
 using Microsoft.VisualBasic.PowerPacks;
 using System.Net;
+using System.Threading;
 
 namespace RailwayCI
 {
@@ -22,7 +23,7 @@ namespace RailwayCI
         {
             InitializeComponent();
             label2.Text = DateTime.Now.ToString("yyyy年MM月dd日 HH时mm分ss秒");
-            Timer timer = new Timer();
+            System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
             timer.Interval = 1000; // 设置计时器间隔为1秒  
             timer.Tick += Timer_Tick; // 绑定Tick事件处理器  
             timer.Start(); // 启动计时器  
@@ -42,8 +43,8 @@ namespace RailwayCI
         public int RailNumber = 0;
         public int DelayTime = 3;
         public int CancelPart = -1;
-        public Timer DelayTimer = new Timer();
-        public Timer SignalTimer = new Timer();
+        public System.Windows.Forms.Timer DelayTimer = new System.Windows.Forms.Timer();
+        public System.Windows.Forms.Timer SignalTimer = new System.Windows.Forms.Timer();
         public enum Types { track, turnout, frog, trainSignal, shunttingSignal, multifunctionSignal };
         public enum OccupancyStates { available, occupied, breakdown };
         public enum OccupancyDirections { none, left, right };
@@ -334,7 +335,7 @@ namespace RailwayCI
             SectionNumber = i;
             RailNumber = j;
             DataConnecting();
-            PartPainting();
+            PartPaintingAsync();
             dataGridView1.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), "导入新站场数据");
         }
         private void DataConnecting()//建立部件间引用
@@ -447,18 +448,18 @@ namespace RailwayCI
             }
 
         }
-        public void PartPainting()//绘图
+        public async Task PartPaintingAsync()//绘图
         {
             int Xpoint = 100, Ypoint = 500;
             ShapeContainer shapeContainer = new ShapeContainer();
             shapeContainer.Location = new System.Drawing.Point(0, 0);
             shapeContainer.Size = this.Size;
-            EachPartPainting(PartsOfStation[0], Xpoint, Ypoint, shapeContainer, true);
-            LightPainting(shapeContainer);
+            await EachPartPainting(PartsOfStation[0], Xpoint, Ypoint, shapeContainer, true);
+            //LightPainting(shapeContainer);
             this.Controls.Add(shapeContainer);
             SignalTimer.Start();
         }
-        private void LightPainting(ShapeContainer shapeContainer)//信号机绘制
+        private async Task LightPainting(ShapeContainer shapeContainer)//信号机绘制
         {
             for (int i = 0; i < SectionNumber; i++)
             {
@@ -601,7 +602,7 @@ namespace RailwayCI
                 }
             }
         }
-        private void EachPartPainting(PartsOfStations thisPart, int Xpoint, int Ypoint, ShapeContainer shapeContainer, Boolean Direction)//轨道区段绘制
+        private async Task EachPartPainting(PartsOfStations thisPart, int Xpoint, int Ypoint, ShapeContainer shapeContainer, Boolean Direction)//轨道区段绘制
         {
             if (thisPart.TypeOfParts == Types.track)
             {
@@ -799,6 +800,7 @@ namespace RailwayCI
 
             }
             thisPart.Painted = true;
+            await Task.Delay(100);
             if (thisPart.Right != null && !thisPart.Right.Painted) EachPartPainting(thisPart.Right, Xpoint + thisPart.Length, Ypoint, shapeContainer, false);
             if (thisPart.Up != null && !thisPart.Up.Painted) EachPartPainting(thisPart.Up, Xpoint, Ypoint - thisPart.Up.Length, shapeContainer, true);
             if (thisPart.Down != null && !thisPart.Down.Painted) EachPartPainting(thisPart.Down, Xpoint, Ypoint + thisPart.Length, shapeContainer, false);
