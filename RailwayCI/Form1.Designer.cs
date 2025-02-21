@@ -80,7 +80,7 @@
             this.关于ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1446, 35);
+            this.menuStrip1.Size = new System.Drawing.Size(1446, 37);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -92,7 +92,7 @@
             this.重置ToolStripMenuItem});
             this.站场ToolStripMenuItem.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.站场ToolStripMenuItem.Name = "站场ToolStripMenuItem";
-            this.站场ToolStripMenuItem.Size = new System.Drawing.Size(97, 31);
+            this.站场ToolStripMenuItem.Size = new System.Drawing.Size(97, 33);
             this.站场ToolStripMenuItem.Text = "站场(&G)";
             // 
             // 直接输入ToolStripMenuItem
@@ -124,7 +124,7 @@
             this.站场图片ToolStripMenuItem});
             this.导出ToolStripMenuItem.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.导出ToolStripMenuItem.Name = "导出ToolStripMenuItem";
-            this.导出ToolStripMenuItem.Size = new System.Drawing.Size(98, 31);
+            this.导出ToolStripMenuItem.Size = new System.Drawing.Size(98, 33);
             this.导出ToolStripMenuItem.Text = "导出(&O)";
             // 
             // 站场数据ToolStripMenuItem
@@ -156,7 +156,7 @@
             this.校准当前时间ToolStripMenuItem});
             this.设置ToolStripMenuItem.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
-            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(94, 31);
+            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(94, 33);
             this.设置ToolStripMenuItem.Text = "设置(&S)";
             // 
             // 修改保护口令ToolStripMenuItem
@@ -183,7 +183,7 @@
             // 
             this.关于ToolStripMenuItem.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.关于ToolStripMenuItem.Name = "关于ToolStripMenuItem";
-            this.关于ToolStripMenuItem.Size = new System.Drawing.Size(96, 31);
+            this.关于ToolStripMenuItem.Size = new System.Drawing.Size(96, 33);
             this.关于ToolStripMenuItem.Text = "关于(&A)";
             this.关于ToolStripMenuItem.Click += new System.EventHandler(this.关于ToolStripMenuItem_Click);
             // 

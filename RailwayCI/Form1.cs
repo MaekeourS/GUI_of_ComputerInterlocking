@@ -32,7 +32,7 @@ namespace RailwayCI
             SignalTimer.Interval = 1000;
             SignalTimer.Tick += SignalChange;
         }
-        public string StationData = "轨道,0/1DG,50,null,1DG;轨道,1DG,150,0/1DG,1DG/1;轨道,1DG/1,50,1DG,1;辙叉,1,上撇,1DG/1,1/IG,1/3,null;轨道,1/IG,150,1,IG;轨道,IG,380,1/IG,IG/2;轨道,IG/2,150,IG,2;道岔,1/3,撇形,3,1;辙叉,3,下撇,null,3/IIG,null,1/3;轨道,3/IIG,50,3,IIG;轨道,IIG,450,3/IIG,IIG/4;轨道,IIG/4,50,IIG,null;辙叉,4,下捺,IIG/4,null,null,2/4;道岔,2/4,捺形,4,2;辙叉,2,上捺,IG/2,2/2DG,2/4,null;轨道,2/2DG,50,2,null;轨道,2DG,150,2/2DG,2DG/0;轨道,2DG/0,50,2DG,null;列车调车信号机,X,上方,1DG,L;列车调车信号机,S,上方,2DG/0,L;调车信号机,D2,下方,IG/2,L;调车信号机,D1,下方,1/IG,R;调车信号机,D4,上方,IIG/4,L;调车信号机,D3,上方,3/IIG,R";
+        public string StationData = "轨道,0/1DG,50,null,1DG;轨道,1DG,150,0/1DG,1DG/1;轨道,1DG/1,50,1DG,1;道岔,1,上撇,1DG/1,1/IG,1/3,null;轨道,1/IG,150,1,IG;轨道,IG,380,1/IG,IG/2;轨道,IG/2,150,IG,2;渡线,1/3,撇形,3,1;道岔,3,下撇,null,3/IIG,null,1/3;轨道,3/IIG,50,3,IIG;轨道,IIG,450,3/IIG,IIG/4;轨道,IIG/4,50,IIG,null;道岔,4,下捺,IIG/4,null,null,2/4;渡线,2/4,捺形,4,2;道岔,2,上捺,IG/2,2/2DG,2/4,null;轨道,2/2DG,50,2,null;轨道,2DG,150,2/2DG,2DG/0;轨道,2DG/0,50,2DG,null;列车调车信号机,X,上方,1DG,L;列车调车信号机,S,上方,2DG/0,L;调车信号机,D2,下方,IG/2,L;调车信号机,D1,下方,1/IG,R;调车信号机,D4,上方,IIG/4,L;调车信号机,D3,上方,3/IIG,R";
         public string Password = "123";//默认口令：123
         public bool PasswordFlag = false;
         public bool SignalLabelDisplayFlag = true;
@@ -43,7 +43,7 @@ namespace RailwayCI
         public int RailNumber = 0;
         public int DelayTime = 3;
         public int CancelPart = -1;
-        public int PaintingDelayTime = 0;
+        public int PaintingDelayTime = 0; // 将该变量修改为非零值（推荐为10）即可观察递归绘制过程
         public System.Windows.Forms.Timer DelayTimer = new System.Windows.Forms.Timer();
         public System.Windows.Forms.Timer SignalTimer = new System.Windows.Forms.Timer();
         public enum Types { track, turnout, frog, trainSignal, shunttingSignal, multifunctionSignal };
@@ -276,9 +276,9 @@ namespace RailwayCI
                 {
                     case "轨道":
                         PartsOfStation[i].TypeOfParts = Types.track; typeFlag = 0; break;
-                    case "道岔":
+                    case "渡线":
                         PartsOfStation[i].TypeOfParts = Types.turnout; typeFlag = 1; break;
-                    case "辙叉":
+                    case "道岔":
                         PartsOfStation[i].TypeOfParts = Types.frog; typeFlag = 2; break;
                     case "列车信号机":
                         PartsOfStation[i].TypeOfParts = Types.trainSignal; typeFlag = 3; break;

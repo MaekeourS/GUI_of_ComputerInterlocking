@@ -53,7 +53,7 @@
             this.TurningName.Name = "TurningName";
             this.TurningName.Size = new System.Drawing.Size(169, 37);
             this.TurningName.TabIndex = 1;
-            this.TurningName.Text = "道岔名称";
+            this.TurningName.Text = "渡线名称";
             this.TurningName.UseVisualStyleBackColor = true;
             this.TurningName.Click += new System.EventHandler(this.CheckedChanged);
             // 
